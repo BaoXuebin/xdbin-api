@@ -1,12 +1,16 @@
 package com.xdbin.Bean;
 
+import com.xdbin.config.DicConstants;
 import com.xdbin.domain.Blog;
+import com.xdbin.utils.ConvertUtil;
 import com.xdbin.utils.FileUtil;
 import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Author: baoxuebin
@@ -20,7 +24,7 @@ public class BlogDetailBean implements Serializable {
 
     private Date updateTime;
 
-    private String[] tags;
+    private List<String> tags;
 
     private String contentTextType;
 
@@ -28,7 +32,7 @@ public class BlogDetailBean implements Serializable {
 
     public BlogDetailBean() {}
 
-    public BlogDetailBean(String blogId, String title, Date updateTime, String[] tags, String contentTextType, String content) {
+    public BlogDetailBean(String blogId, String title, Date updateTime, List<String> tags, String contentTextType, String content) {
         this.blogId = blogId;
         this.title = title;
         this.updateTime = updateTime;
@@ -39,7 +43,7 @@ public class BlogDetailBean implements Serializable {
 
     public static BlogDetailBean parseBean(Blog blog, String content) {
         if (StringUtils.isEmpty(blog)) return null;
-        String[] tags = StringUtils.isEmpty(blog.getTags()) ? null : blog.getTags().split(",");
+        List<String> tags = ConvertUtil.getTagNames(blog.getTags());
         String contentTextType = "markdown";
         if (blog.getContentTextType() == Blog.HTML) {
             contentTextType = "html";
@@ -80,11 +84,11 @@ public class BlogDetailBean implements Serializable {
         this.updateTime = updateTime;
     }
 
-    public String[] getTags() {
+    public List<String> getTags() {
         return tags;
     }
 
-    public void setTags(String[] tags) {
+    public void setTags(List<String> tags) {
         this.tags = tags;
     }
 

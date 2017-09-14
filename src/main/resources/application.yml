@@ -2,10 +2,13 @@ server:
   port: 8080
   context-path: /api/v1
 
-# mysql 数据源配置
 spring:
+# dev 开发环境 prod 生产环境
+  profiles:
+    active: dev
+  # mysql 数据源配置
   datasource:
-    url: jdbc:mysql://127.0.0.1:3306/xdbin?characterEncoding=utf8&useSSL=true
+    url: jdbc:mysql://localhost:3306/xdbin?characterEncoding=utf8&useSSL=true
     username: xdbin_db
     password: xdbin_db%rw
     driver-class-name: com.mysql.jdbc.Driver
@@ -15,6 +18,3 @@ spring:
       ddl-auto: none
     # 是否显示 sql
     show-sql: true
-
-path:
-  blog: /Users/baoxuebin/Desktop/data/

@@ -1,0 +1,3 @@
+path:
+  # 博客文件存储路径，最后必须带反斜线
+  blog: /home/baoxuebin/www/xdbin/blog/

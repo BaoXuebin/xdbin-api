@@ -18,3 +18,9 @@ spring:
       ddl-auto: none
     # 是否显示 sql
     show-sql: true
+
+jwt:
+  header: Authorization
+  secret: mySecret
+  expiration: 60
+  tokenHead: Bearer

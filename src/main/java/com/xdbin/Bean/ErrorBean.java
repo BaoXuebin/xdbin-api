@@ -35,4 +35,5 @@ public class ErrorBean implements Serializable {
     public void setError(String error) {
         this.error = error;
     }
+
 }

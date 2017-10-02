@@ -14,7 +14,8 @@ public class ConvertUtil {
 
     public static long parseLong(String s, long _default) {
         long l = _default;
-        l = Long.parseLong(s);
+        if (!StringUtils.isEmpty(s))
+            l = Long.parseLong(s);
         return l;
     }
 

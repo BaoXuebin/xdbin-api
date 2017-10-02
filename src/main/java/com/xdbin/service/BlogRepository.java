@@ -15,6 +15,9 @@ import java.util.List;
  */
 interface BlogRepository extends JpaRepository<Blog, Serializable> {
 
+    @Query("SELECT b FROM Blog b")
+    List<Blog> findAllBlogsByPage(Pageable pageable);
+
     @Query("SELECT b FROM Blog b WHERE b.ifPub = 1")
     List<Blog> findPubBlogsByPage(Pageable pageable);
 

@@ -3,6 +3,8 @@ package com.xdbin.service;
 import com.xdbin.Bean.BlogBean;
 import com.xdbin.Bean.BlogDetailBean;
 import com.xdbin.Bean.BlogItemBean;
+import com.xdbin.Bean.BlogTableBean;
+import com.xdbin.annotation.Security;
 import com.xdbin.config.PathProperty;
 import com.xdbin.domain.Blog;
 import com.xdbin.utils.ConvertUtil;
@@ -86,6 +88,10 @@ public class BlogService {
             blogRepository.save(blog);
     }
 
+    public void deleteBlog(String blogId) {
+        blogRepository.delete(blogId);
+    }
+
     public List<BlogItemBean> getPublicBlogsByPage(int page) {
         Sort s = new Sort(Sort.Direction.DESC, "updateTime");
         return parseBeanList(blogRepository.findPubBlogsByPage(new PageRequest(page - 1, 10, s)));
@@ -99,6 +105,21 @@ public class BlogService {
             });
         }
         return blogItemBeans;
+    }
+
+    public List<BlogTableBean> getAllBlogsByPage(int page) {
+        Sort s = new Sort(Sort.Direction.DESC, "updateTime");
+        return parseBlogTableList(blogRepository.findAllBlogsByPage(new PageRequest(page - 1, 10, s)));
+    }
+
+    private List<BlogTableBean> parseBlogTableList(List<Blog> blogs) {
+        List<BlogTableBean> blogTableBeans = new ArrayList<>();
+        if (!StringUtils.isEmpty(blogs) && blogs.size() > 0) {
+            blogs.forEach(blog -> {
+                blogTableBeans.add(BlogTableBean.parseBean(blog));
+            });
+        }
+        return blogTableBeans;
     }
 
 }

@@ -3,6 +3,7 @@ package com.xdbin.web;
 import com.xdbin.Bean.BlogBean;
 import com.xdbin.Bean.BlogDetailBean;
 import com.xdbin.Bean.ErrorBean;
+import com.xdbin.annotation.Security;
 import com.xdbin.domain.Blog;
 import com.xdbin.service.BlogService;
 import com.xdbin.utils.ConvertUtil;
@@ -30,6 +31,13 @@ public class BlogController {
         return ResponseEntity.ok(blogService.getPublicBlogsByPage((int) p));
     }
 
+    @Security
+    @RequestMapping(value = "/blogs/all", method = RequestMethod.GET)
+    public ResponseEntity allTableBlogs(String page) {
+        long p = ConvertUtil.parseLong(page, 1);
+        return ResponseEntity.ok(blogService.getAllBlogsByPage((int) p));
+    }
+
     @RequestMapping(value = "/blog/{blogId}", method = RequestMethod.GET)
     public ResponseEntity blogDetail(@PathVariable("blogId") String blogId) {
         BlogDetailBean blogDetailBean = null;
@@ -39,6 +47,7 @@ public class BlogController {
         return ResponseEntity.ok(blogDetailBean);
     }
 
+    @Security
     @RequestMapping(value = "/blog", method = RequestMethod.POST)
     public ResponseEntity saveBlog(@RequestBody BlogBean blogBean) {
         if (StringUtils.isEmpty(blogBean)) {
@@ -57,4 +66,14 @@ public class BlogController {
         blogBean.setBlogId(result);
         return ResponseEntity.ok(blogBean);
     }
+
+    @Security
+    @RequestMapping(value = "/blog/{blogId}", method = RequestMethod.DELETE)
+    public ResponseEntity delete(@PathVariable("blogId") String blogId) {
+        if (StringUtils.isEmpty(blogId))
+            return ResponseEntity.ok(new ErrorBean(400, "博客Id不能为空"));
+        blogService.deleteBlog(blogId);
+        return null;
+    }
+
 }

@@ -26,11 +26,29 @@ public class TagService {
     public void saveTag(Tag tag) {
         if (!StringUtils.isEmpty(tag)) {
             tagRepository.save(tag);
+            // 刷新标签
+            refreshTagMap();
         }
     }
 
     public List<Tag> findAllTags() {
         return tagRepository.findAll();
+    }
+
+    public boolean isExit(String tagName) {
+        return tagRepository.findByTagName(tagName) != null;
+    }
+
+    public Tag deleteTag(Long id) {
+        Tag tag = tagRepository.findOne(id);
+        if (StringUtils.isEmpty(tag)) {
+            return null;
+        } else {
+            tagRepository.delete(id);
+            // 刷新标签
+            refreshTagMap();
+            return tag;
+        }
     }
 
     public void refreshTagMap() {
@@ -41,5 +59,4 @@ public class TagService {
         }
         DicConstants.getInstance().setTagMap(tagMap);
     }
-
 }

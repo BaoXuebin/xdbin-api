@@ -1,15 +1,13 @@
 package com.xdbin.web;
 
 import com.xdbin.Bean.ErrorBean;
+import com.xdbin.annotation.Security;
 import com.xdbin.config.DicConstants;
 import com.xdbin.domain.Tag;
 import com.xdbin.service.TagService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
@@ -21,7 +19,6 @@ import java.util.Map;
  * Date: 2017/9/11
  */
 @RestController
-@CrossOrigin(value = "*")
 public class TagController {
 
     @Resource
@@ -37,20 +34,30 @@ public class TagController {
         return ResponseEntity.ok(tags);
     }
 
-    @RequestMapping(value = "/tag/add", method = RequestMethod.POST)
-    public ResponseEntity addTag(String name) {
-        if (StringUtils.isEmpty(name)) {
+    @Security
+    @RequestMapping(value = "/tag", method = {RequestMethod.POST, RequestMethod.PUT})
+    public ResponseEntity addTag(@RequestBody Tag tag) {
+        if (StringUtils.isEmpty(tag) || StringUtils.isEmpty(tag.getTagName())) {
             return ResponseEntity.ok(new ErrorBean(400, "标签不能为空"));
         }
-        Tag tag = new Tag();
-        tag.setTagName(name.trim());
+        if (tagService.isExit(tag.getTagName())) {
+            return ResponseEntity.ok(new ErrorBean(400, "标签已经存在"));
+        }
         tagService.saveTag(tag);
         return ResponseEntity.ok(tag);
     }
 
-    @RequestMapping(value = "/tag/delete", method = RequestMethod.DELETE)
-    public ResponseEntity deleteTag(long id) {
-        return null;
+    @Security
+    @RequestMapping(value = "/tag", method = RequestMethod.DELETE)
+    public ResponseEntity delete(@RequestBody Tag tag) {
+        if (StringUtils.isEmpty(tag)) {
+            return ResponseEntity.ok(new ErrorBean(400, "标签不能为空"));
+        }
+        tag = tagService.deleteTag(tag.getTagId());
+        if (StringUtils.isEmpty(tag)) {
+            return ResponseEntity.ok(new ErrorBean(400, "标签不存在"));
+        }
+        return ResponseEntity.ok(tag);
     }
 
 }

@@ -24,5 +24,5 @@ CREATE TABLE `dic_tag` (
 
 -- 初始化用户
 
-CREATE USER 'xdbin_db'@'localhost' IDENTIFIED BY 'xdbin_db%rw';
-GRANT SELECT, UPDATE, DELETE, INSERT ON xdbin.* TO 'xdbin_db'@'localhost';
+CREATE USER 'xxx'@'localhost' IDENTIFIED BY 'xxx';
+GRANT SELECT, UPDATE, DELETE, INSERT ON xdbin.* TO 'xxx'@'localhost';

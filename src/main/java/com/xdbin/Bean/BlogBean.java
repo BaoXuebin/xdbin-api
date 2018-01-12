@@ -1,5 +1,6 @@
 package com.xdbin.Bean;
 
+import com.xdbin.domain.Blog;
 import org.springframework.util.StringUtils;
 
 import java.io.Serializable;
@@ -21,6 +22,20 @@ public class BlogBean implements Serializable {
     private String content;
 
     private boolean ifPub;
+
+    public static BlogBean parseBean(Blog blog, String content) {
+        if (StringUtils.isEmpty(blog)) return null;
+
+        BlogBean blogBean = new BlogBean();
+        blogBean.setBlogId(blog.getBlogId());
+        blogBean.setTitle(blog.getTitle());
+        blogBean.setTags(blog.getTags());
+        blogBean.setSummary(blog.getSummary());
+        blogBean.setContent(content);
+        blogBean.setIfPub(blog.getIfPub() == 1);
+
+        return blogBean;
+    }
 
     public String validate() {
         if (StringUtils.isEmpty(title)) {
@@ -78,4 +93,5 @@ public class BlogBean implements Serializable {
     public void setIfPub(boolean ifPub) {
         this.ifPub = ifPub;
     }
+
 }

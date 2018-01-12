@@ -19,6 +19,13 @@ public class ConvertUtil {
         return l;
     }
 
+    public static  int parseInteger(String s, int _default) {
+        int i = _default;
+        if (!StringUtils.isEmpty(s))
+            i = Integer.parseInt(s);
+        return i;
+    }
+
     public static List<String> getTagNames(String tagStr) {
         if (StringUtils.isEmpty(tagStr)) return Collections.emptyList();
 

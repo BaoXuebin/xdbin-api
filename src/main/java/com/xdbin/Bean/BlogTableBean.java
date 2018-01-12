@@ -16,6 +16,8 @@ public class BlogTableBean implements Serializable {
 
     private String shortBlogId;
 
+    private String title;
+
     private Date publishDate;
 
     private boolean isPub;
@@ -26,6 +28,7 @@ public class BlogTableBean implements Serializable {
         return new BlogTableBean(
                 blog.getBlogId(),
                 shortBlogId,
+                blog.getTitle(),
                 blog.getPublishTime(),
                 blog.getIfPub() == 1
         );
@@ -34,9 +37,10 @@ public class BlogTableBean implements Serializable {
     public BlogTableBean() {
     }
 
-    public BlogTableBean(String blogId, String shortBlogId, Date publishDate, boolean isPub) {
+    public BlogTableBean(String blogId, String shortBlogId, String title, Date publishDate, boolean isPub) {
         this.blogId = blogId;
         this.shortBlogId = shortBlogId;
+        this.title = title;
         this.publishDate = publishDate;
         this.isPub = isPub;
     }
@@ -55,6 +59,14 @@ public class BlogTableBean implements Serializable {
 
     public void setShortBlogId(String shortBlogId) {
         this.shortBlogId = shortBlogId;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public Date getPublishDate() {

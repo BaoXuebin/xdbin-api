@@ -1,9 +1,6 @@
 package com.xdbin.service;
 
-import com.xdbin.Bean.BlogBean;
-import com.xdbin.Bean.BlogDetailBean;
-import com.xdbin.Bean.BlogItemBean;
-import com.xdbin.Bean.BlogTableBean;
+import com.xdbin.Bean.*;
 import com.xdbin.annotation.Security;
 import com.xdbin.config.PathProperty;
 import com.xdbin.domain.Blog;
@@ -46,12 +43,12 @@ public class BlogService {
         return null;
     }
 
-    public BlogDetailBean getBlogDetailById(String blogId) {
+    public UpdateBlogBean getUpdateBlogById(String blogId) {
         if (StringUtils.isEmpty(blogId)) return null;
         Blog blog = blogRepository.getOne(blogId);
         if (!StringUtils.isEmpty(blog)) {
             String content = FileUtil.readBlogContent(pathProperty.getBlog(), blog.getContentUrl());
-            return BlogDetailBean.parseBean(blog, content);
+            return UpdateBlogBean.parseBean(blog, content);
         }
         return null;
     }
@@ -64,6 +61,7 @@ public class BlogService {
         }
 
         Blog blog = new Blog();
+        blog.setBlogId(blogBean.getBlogId());
         blog.setPublishTime(new Date());
         blog.setUpdateTime(new Date());
         blog.setTitle(blogBean.getTitle());
@@ -82,6 +80,7 @@ public class BlogService {
         }
         return blog.getBlogId();
     }
+
 
     public void saveBlog(Blog blog) {
         if (blog != null)
@@ -120,6 +119,14 @@ public class BlogService {
             });
         }
         return blogTableBeans;
+    }
+
+    public void setBlogPublic(String blogId) {
+        blogRepository.updateBlogPubByBlogId(1, blogId);
+    }
+
+    public void setBlogPrivate(String blogId) {
+        blogRepository.updateBlogPubByBlogId(0, blogId);
     }
 
 }

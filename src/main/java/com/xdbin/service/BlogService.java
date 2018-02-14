@@ -16,8 +16,11 @@ import javax.annotation.Resource;
 import javax.transaction.Transactional;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+
+import static java.util.stream.Collectors.toList;
 
 /**
  * Author: baoxuebin
@@ -72,12 +75,7 @@ public class BlogService {
         blog.setContentUrl(contentUrl);
         blog.setIfPub(blogBean.isIfPub() ? 1 : 0);
 
-        try {
-            saveBlog(blog);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
+        saveBlog(blog);
         return blog.getBlogId();
     }
 
@@ -96,12 +94,12 @@ public class BlogService {
         return parseBeanList(blogRepository.findPubBlogsByPage(new PageRequest(page - 1, 10, s)));
     }
 
-    private List<BlogItemBean> parseBeanList(List<Blog> blogs) {
-        List<BlogItemBean> blogItemBeans = new ArrayList<>();
-        if (!StringUtils.isEmpty(blogs) && blogs.size() > 0) {
-            blogs.forEach(blog -> {
-                blogItemBeans.add(BlogItemBean.parseBean(blog));
-            });
+    private List<BlogItemBean> parseBeanList(List<Blog> blogList) {
+        List<BlogItemBean> blogItemBeans = Collections.emptyList();
+        if (!StringUtils.isEmpty(blogList) && blogList.size() > 0) {
+            blogItemBeans = blogList.stream()
+                    .map(BlogItemBean::parseBean)
+                    .collect(toList());
         }
         return blogItemBeans;
     }
@@ -111,12 +109,12 @@ public class BlogService {
         return parseBlogTableList(blogRepository.findAllBlogsByPage(new PageRequest(page - 1, 10, s)));
     }
 
-    private List<BlogTableBean> parseBlogTableList(List<Blog> blogs) {
-        List<BlogTableBean> blogTableBeans = new ArrayList<>();
-        if (!StringUtils.isEmpty(blogs) && blogs.size() > 0) {
-            blogs.forEach(blog -> {
-                blogTableBeans.add(BlogTableBean.parseBean(blog));
-            });
+    private List<BlogTableBean> parseBlogTableList(List<Blog> blogList) {
+        List<BlogTableBean> blogTableBeans = Collections.emptyList();
+        if (!StringUtils.isEmpty(blogList) && blogList.size() > 0) {
+            blogTableBeans = blogList.stream()
+                    .map(BlogTableBean::parseBean)
+                    .collect(toList());
         }
         return blogTableBeans;
     }
@@ -127,6 +125,24 @@ public class BlogService {
 
     public void setBlogPrivate(String blogId) {
         blogRepository.updateBlogPubByBlogId(0, blogId);
+    }
+
+    /**
+     * 根据 标签 查询博客列表
+     * @param tagId 标签id
+     * @return 博客列表
+     */
+    public List<BlogItemBean> getBlogsByTagId(int page, String tagId) {
+        List<BlogItemBean> blogItemBeans = Collections.emptyList();
+        if (StringUtils.isEmpty(tagId)) return blogItemBeans;
+
+        Sort s = new Sort(Sort.Direction.DESC, "updateTime");
+        List<Blog> blogList = blogRepository.findBlogsLikeTagId(new PageRequest(page - 1, 10, s), tagId);
+        if (!StringUtils.isEmpty(blogList) && blogList.size() > 0) {
+            blogItemBeans = blogList.stream().map(BlogItemBean::parseBean).collect(toList());
+        }
+
+        return blogItemBeans;
     }
 
 }

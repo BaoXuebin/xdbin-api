@@ -5,8 +5,10 @@ import com.xdbin.Bean.BlogDetailBean;
 import com.xdbin.Bean.ErrorBean;
 import com.xdbin.Bean.UpdateBlogBean;
 import com.xdbin.annotation.Security;
+import com.xdbin.config.DicConstants;
 import com.xdbin.domain.Blog;
 import com.xdbin.service.BlogService;
+import com.xdbin.service.TagService;
 import com.xdbin.utils.ConvertUtil;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
@@ -25,10 +27,24 @@ public class BlogController {
     @Resource
     private BlogService blogService;
 
+    @Resource
+    private TagService tagService;
+
+    /**
+     * 条件分页查询博客列表
+     * @param page 分页条件
+     * @param tag tagName
+     */
     @RequestMapping(value = "/blogs", method = RequestMethod.GET)
-    public ResponseEntity blogs(String page) {
+    public ResponseEntity blogs(String page, String tag) {
         long p = ConvertUtil.parseLong(page, 1);
-        return ResponseEntity.ok(blogService.getPublicBlogsByPage((int) p));
+
+        if (StringUtils.isEmpty(tag)) {
+            return ResponseEntity.ok(blogService.getPublicBlogsByPage((int) p));
+        }
+
+        String tagId = tagService.getTagIdByName(tag);
+        return ResponseEntity.ok(blogService.getBlogsByTagId((int) p, tagId));
     }
 
     @Security

@@ -33,4 +33,9 @@ public class BlogServiceTest {
         blogService.setBlogPrivate("ff8080815ee76e80015ee7c1af080000");
     }
 
+    @Test
+    public void getBlogsByTagId() throws Exception {
+        // System.out.println(blogService.getBlogsByTagId("10"));
+    }
+
 }

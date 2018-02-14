@@ -1,6 +1,8 @@
 package com.xdbin.Bean;
 
 import com.xdbin.domain.Blog;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 import org.springframework.util.StringUtils;
 
 import java.io.Serializable;
@@ -10,6 +12,8 @@ import java.util.Date;
  * Author: baoxuebin
  * Date: 2017/10/2
  */
+@Data
+@AllArgsConstructor
 public class BlogTableBean implements Serializable {
 
     private String blogId;
@@ -32,56 +36,5 @@ public class BlogTableBean implements Serializable {
                 blog.getPublishTime(),
                 blog.getIfPub() == 1
         );
-    }
-
-    public BlogTableBean() {
-    }
-
-    public BlogTableBean(String blogId, String shortBlogId, String title, Date publishDate, boolean isPub) {
-        this.blogId = blogId;
-        this.shortBlogId = shortBlogId;
-        this.title = title;
-        this.publishDate = publishDate;
-        this.isPub = isPub;
-    }
-
-    public String getBlogId() {
-        return blogId;
-    }
-
-    public void setBlogId(String blogId) {
-        this.blogId = blogId;
-    }
-
-    public String getShortBlogId() {
-        return shortBlogId;
-    }
-
-    public void setShortBlogId(String shortBlogId) {
-        this.shortBlogId = shortBlogId;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public Date getPublishDate() {
-        return publishDate;
-    }
-
-    public void setPublishDate(Date publishDate) {
-        this.publishDate = publishDate;
-    }
-
-    public boolean isPub() {
-        return isPub;
-    }
-
-    public void setPub(boolean pub) {
-        isPub = pub;
     }
 }

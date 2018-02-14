@@ -59,4 +59,14 @@ public class TagService {
         }
         DicConstants.getInstance().setTagMap(tagMap);
     }
+
+    public String getTagIdByName(String tagName) {
+        Map<Long, String> tagMap = DicConstants.getInstance().getTagMap();
+        for (Long id : tagMap.keySet()) {
+            if (tagMap.get(id).equals(tagName)) {
+                return id.toString();
+            }
+        }
+        return null;
+    }
 }

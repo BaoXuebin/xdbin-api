@@ -1,7 +1,10 @@
 package com.xdbin.Bean;
 
 import com.xdbin.domain.Blog;
+import com.xdbin.domain.Tag;
 import com.xdbin.utils.ConvertUtil;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 import org.springframework.util.StringUtils;
 
 import java.io.Serializable;
@@ -12,6 +15,8 @@ import java.util.List;
  * Author: baoxuebin
  * Date: 2017/9/10
  */
+@Data
+@AllArgsConstructor
 public class BlogDetailBean implements Serializable {
 
     private String blogId;
@@ -20,7 +25,7 @@ public class BlogDetailBean implements Serializable {
 
     private Date updateTime;
 
-    private List<String> tags;
+    private List<Tag> tags;
 
     private String contentTextType;
 
@@ -28,18 +33,9 @@ public class BlogDetailBean implements Serializable {
 
     public BlogDetailBean() {}
 
-    public BlogDetailBean(String blogId, String title, Date updateTime, List<String> tags, String contentTextType, String content) {
-        this.blogId = blogId;
-        this.title = title;
-        this.updateTime = updateTime;
-        this.tags = tags;
-        this.contentTextType = contentTextType;
-        this.content = content;
-    }
-
     public static BlogDetailBean parseBean(Blog blog, String content) {
         if (StringUtils.isEmpty(blog)) return null;
-        List<String> tags = ConvertUtil.getTagNames(blog.getTags());
+        List<Tag> tags = ConvertUtil.getTagNames(blog.getTags());
         String contentTextType = "markdown";
         if (blog.getContentTextType() == Blog.HTML) {
             contentTextType = "html";
@@ -54,53 +50,5 @@ public class BlogDetailBean implements Serializable {
                 contentTextType,
                 content
         );
-    }
-
-    public String getBlogId() {
-        return blogId;
-    }
-
-    public void setBlogId(String blogId) {
-        this.blogId = blogId;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public Date getUpdateTime() {
-        return updateTime;
-    }
-
-    public void setUpdateTime(Date updateTime) {
-        this.updateTime = updateTime;
-    }
-
-    public List<String> getTags() {
-        return tags;
-    }
-
-    public void setTags(List<String> tags) {
-        this.tags = tags;
-    }
-
-    public String getContent() {
-        return content;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
-    }
-
-    public String getContentTextType() {
-        return contentTextType;
-    }
-
-    public void setContentTextType(String contentTextType) {
-        this.contentTextType = contentTextType;
     }
 }

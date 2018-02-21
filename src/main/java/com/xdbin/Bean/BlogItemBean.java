@@ -1,6 +1,7 @@
 package com.xdbin.Bean;
 
 import com.xdbin.domain.Blog;
+import com.xdbin.domain.Tag;
 import com.xdbin.utils.ConvertUtil;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -28,11 +29,11 @@ public class BlogItemBean implements Serializable {
 
     private String summaryTextType;
 
-    private List<String> tags;
+    private List<Tag> tags;
 
     public static BlogItemBean parseBean(Blog blog) {
         if (StringUtils.isEmpty(blog)) return null;
-        List<String> tags = ConvertUtil.getTagNames(blog.getTags());
+        List<Tag> tags = ConvertUtil.getTagNames(blog.getTags());
         String summaryTextType = "markdown";
         if (blog.getSummaryTextType() == Blog.HTML) {
             summaryTextType = "html";
@@ -44,8 +45,8 @@ public class BlogItemBean implements Serializable {
                 blog.getBlogId(),
                 blog.getTitle(),
                 blog.getUpdateTime(),
-                summaryTextType,
                 blog.getSummary(),
+                summaryTextType,
                 tags
         );
     }

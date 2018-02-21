@@ -1,6 +1,7 @@
 package com.xdbin.utils;
 
 import com.xdbin.config.DicConstants;
+import com.xdbin.domain.Tag;
 import org.springframework.util.StringUtils;
 
 import java.text.SimpleDateFormat;
@@ -26,17 +27,18 @@ public class ConvertUtil {
         return i;
     }
 
-    public static List<String> getTagNames(String tagStr) {
+    public static List<Tag> getTagNames(String tagStr) {
         if (StringUtils.isEmpty(tagStr)) return Collections.emptyList();
 
         String[] tags = tagStr.split(",");
-        List<String> tagList = null;
+        List<Tag> tagList = null;
         if (!StringUtils.isEmpty(tags) && tags.length > 0) {
             tagList = new ArrayList<>(tags.length);
             for (String s : tags) {
-                String t = DicConstants.getInstance().getTagMap().get(ConvertUtil.parseLong(s, -1));
+                Long tagId = ConvertUtil.parseLong(s, -1);
+                String t = DicConstants.getInstance().getTagMap().get(tagId);
                 if (!StringUtils.isEmpty(t) && !tagList.contains(t)) {
-                    tagList.add(t);
+                    tagList.add(new Tag(tagId, t));
                 }
             }
         }

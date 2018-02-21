@@ -1,9 +1,6 @@
 package com.xdbin.web;
 
-import com.xdbin.Bean.BlogBean;
-import com.xdbin.Bean.BlogDetailBean;
-import com.xdbin.Bean.ErrorBean;
-import com.xdbin.Bean.UpdateBlogBean;
+import com.xdbin.Bean.*;
 import com.xdbin.annotation.Security;
 import com.xdbin.config.DicConstants;
 import com.xdbin.domain.Blog;
@@ -32,19 +29,11 @@ public class BlogController {
 
     /**
      * 条件分页查询博客列表
-     * @param page 分页条件
-     * @param tag tagName
+     * @param blogCondition 分页条件
      */
     @RequestMapping(value = "/blogs", method = RequestMethod.GET)
-    public ResponseEntity blogs(String page, String tag) {
-        long p = ConvertUtil.parseLong(page, 1);
-
-        if (StringUtils.isEmpty(tag)) {
-            return ResponseEntity.ok(blogService.getPublicBlogsByPage((int) p));
-        }
-
-        String tagId = tagService.getTagIdByName(tag);
-        return ResponseEntity.ok(blogService.getBlogsByTagId((int) p, tagId));
+    public ResponseEntity blogs(BlogCondition blogCondition) {
+        return ResponseEntity.ok(blogService.getBlogsByCondition(blogCondition));
     }
 
     @Security

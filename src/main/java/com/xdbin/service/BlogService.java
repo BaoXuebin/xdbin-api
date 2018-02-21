@@ -6,13 +6,19 @@ import com.xdbin.config.PathProperty;
 import com.xdbin.domain.Blog;
 import com.xdbin.utils.ConvertUtil;
 import com.xdbin.utils.FileUtil;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 import javax.transaction.Transactional;
 import java.io.File;
 import java.util.ArrayList;
@@ -63,12 +69,21 @@ public class BlogService {
             return null;
         }
 
+        // 标签后加 ,
+        String tags = null;
+        if (!StringUtils.isEmpty(blogBean.getTags())) {
+            if (!blogBean.getTags().startsWith(","))
+                tags = "," + tags;
+            if (!blogBean.getTags().endsWith(","))
+                tags = tags + ",";
+        }
+
         Blog blog = new Blog();
         blog.setBlogId(blogBean.getBlogId());
         blog.setPublishTime(new Date());
         blog.setUpdateTime(new Date());
         blog.setTitle(blogBean.getTitle());
-        blog.setTags(blogBean.getTags());
+        blog.setTags(tags);
         blog.setSummaryTextType(Blog.MARKDOWN);
         blog.setSummary(blogBean.getSummary());
         blog.setContentTextType(Blog.MARKDOWN);
@@ -128,21 +143,35 @@ public class BlogService {
     }
 
     /**
-     * 根据 标签 查询博客列表
-     * @param tagId 标签id
-     * @return 博客列表
+     * 条件查询博客列表
+     * @param condition 条件集合
+     * @return List<BlogItemBean>
      */
-    public List<BlogItemBean> getBlogsByTagId(int page, String tagId) {
+    public List<BlogItemBean> getBlogsByCondition(BlogCondition condition) {
         List<BlogItemBean> blogItemBeans = Collections.emptyList();
-        if (StringUtils.isEmpty(tagId)) return blogItemBeans;
+        if (StringUtils.isEmpty(condition)) return blogItemBeans;
 
         Sort s = new Sort(Sort.Direction.DESC, "updateTime");
-        List<Blog> blogList = blogRepository.findBlogsLikeTagId(new PageRequest(page - 1, 10, s), tagId);
-        if (!StringUtils.isEmpty(blogList) && blogList.size() > 0) {
-            blogItemBeans = blogList.stream().map(BlogItemBean::parseBean).collect(toList());
+        Page<Blog> blogPage = blogRepository.findAll(where(condition), new PageRequest(condition.getPage() - 1, 10, s));
+        if (blogPage.getContent().size() > 0) {
+            blogItemBeans = blogPage.getContent().stream().map(BlogItemBean::parseBean).collect(toList());
         }
-
         return blogItemBeans;
+    }
+
+    private Specification<Blog> where(BlogCondition blogCondition) {
+        return (root, criteriaQuery, criteriaBuilder) -> {
+            List<Predicate> predicates = new ArrayList<>();
+            // 模糊匹配标题
+            if (!StringUtils.isEmpty(blogCondition.getTitle())) {
+                predicates.add(criteriaBuilder.like(root.get("title").as(String.class), "%" + blogCondition.getTitle() + "%"));
+            }
+            // 模糊查询标签
+            if (!StringUtils.isEmpty(blogCondition.getTagId())) {
+                predicates.add(criteriaBuilder.like(root.get("tags").as(String.class), "%," + blogCondition.getTagId() + ",%"));
+            }
+            return criteriaQuery.where(predicates.toArray(new Predicate[predicates.size()])).getRestriction();
+        };
     }
 
 }

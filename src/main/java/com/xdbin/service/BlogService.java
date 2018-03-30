@@ -70,7 +70,7 @@ public class BlogService {
         }
 
         // 标签后加 ,
-        String tags = null;
+        String tags = blogBean.getTags();
         if (!StringUtils.isEmpty(blogBean.getTags())) {
             if (!blogBean.getTags().startsWith(","))
                 tags = "," + tags;
@@ -169,6 +169,11 @@ public class BlogService {
             // 模糊查询标签
             if (!StringUtils.isEmpty(blogCondition.getTagId())) {
                 predicates.add(criteriaBuilder.like(root.get("tags").as(String.class), "%," + blogCondition.getTagId() + ",%"));
+            }
+            // 是否公开
+            if (blogCondition.getPub() != 0) {
+                // 只查询公开
+                predicates.add(criteriaBuilder.equal(root.get("ifPub").as(Integer.class), 1));
             }
             return criteriaQuery.where(predicates.toArray(new Predicate[predicates.size()])).getRestriction();
         };

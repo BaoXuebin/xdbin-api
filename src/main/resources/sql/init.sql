@@ -22,6 +22,19 @@ CREATE TABLE `dic_tag` (
   PRIMARY KEY (`tag_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT = '标签字典表';
 
+create table `NET_BLOG` (
+  uid Integer AUTO_INCREMENT primary key,
+  id varchar(50) not null,
+  title varchar(50),
+  href varchar(200),
+  author varchar(20),
+  publishTime date,
+  `count` integer,
+  comment integer,
+  origin varchar(100),
+  originLink varchar(100)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT = '关注的博客';
+
 -- 初始化用户
 
 CREATE USER 'xxx'@'localhost' IDENTIFIED BY 'xxx';

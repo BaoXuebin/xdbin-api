@@ -21,5 +21,7 @@ public class BlogCondition implements Serializable {
 
     private String tagName;
 
+    private int pub;
+
     public BlogCondition() {}
 }

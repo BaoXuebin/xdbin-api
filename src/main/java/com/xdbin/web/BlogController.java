@@ -5,6 +5,7 @@ import com.xdbin.annotation.Security;
 import com.xdbin.config.DicConstants;
 import com.xdbin.domain.Blog;
 import com.xdbin.service.BlogService;
+import com.xdbin.service.NetBlogService;
 import com.xdbin.service.TagService;
 import com.xdbin.utils.ConvertUtil;
 import org.springframework.http.ResponseEntity;
@@ -27,12 +28,21 @@ public class BlogController {
     @Resource
     private TagService tagService;
 
+    @Resource
+    private NetBlogService netBlogService;
+
     /**
      * 条件分页查询博客列表
      * @param blogCondition 分页条件
      */
     @RequestMapping(value = "/blogs", method = RequestMethod.GET)
     public ResponseEntity blogs(BlogCondition blogCondition) {
+        if (!StringUtils.isEmpty(blogCondition)) {
+            blogCondition.setPub(1);
+        } else {
+            blogCondition = new BlogCondition();
+            blogCondition.setPub(1);
+        }
         return ResponseEntity.ok(blogService.getBlogsByCondition(blogCondition));
     }
 
@@ -112,6 +122,13 @@ public class BlogController {
         Blog blog = new Blog();
         blog.setBlogId(blogId);
         return ResponseEntity.ok(blog);
+    }
+
+    // 关注的其他博客
+    @RequestMapping(value = "/blog/star")
+    public ResponseEntity findNetBlogs(String page) {
+        long p = ConvertUtil.parseLong(page, 1);
+        return ResponseEntity.ok(netBlogService.findAllByPage((int) p, null));
     }
 
 }

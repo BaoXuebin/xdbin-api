@@ -12,6 +12,7 @@ CREATE TABLE `t_blog` (
   `summary` VARCHAR(2000) COMMENT '博客概要',
   `content_text_type` TINYINT(1) COMMENT '博客概要文本类型',
   `content_url` VARCHAR(100) NOT NULL COMMENT '博客内容文件路径',
+  `edit_num` INTEGER DEFAULT 0 COMMENT '编辑次数',
   `if_pub` TINYINT(1) DEFAULT 1 COMMENT '公开是否公开',
   PRIMARY KEY (`blog_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT = '博客信息表';

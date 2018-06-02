@@ -1,10 +1,15 @@
 package com.xdbin.Bean;
 
+import com.xdbin.config.DicConstants;
 import com.xdbin.domain.Blog;
+import com.xdbin.domain.Tag;
+import com.xdbin.utils.ConvertUtil;
 import lombok.Data;
 import org.springframework.util.StringUtils;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Author: baoxuebin
@@ -17,7 +22,7 @@ public class BlogBean implements Serializable {
 
     private String title;
 
-    private String tags;
+    private List<Tag> tags;
 
     private String summary;
 
@@ -25,19 +30,28 @@ public class BlogBean implements Serializable {
 
     private boolean ifPub;
 
-    public static BlogBean parseBean(Blog blog, String content) {
-        if (StringUtils.isEmpty(blog)) return null;
-
-        BlogBean blogBean = new BlogBean();
-        blogBean.setBlogId(blog.getBlogId());
-        blogBean.setTitle(blog.getTitle());
-        blogBean.setTags(blog.getTags());
-        blogBean.setSummary(blog.getSummary());
-        blogBean.setContent(content);
-        blogBean.setIfPub(blog.getIfPub() == 1);
-
-        return blogBean;
-    }
+//    public static BlogBean parseBean(Blog blog, String content) {
+//        if (StringUtils.isEmpty(blog)) return null;
+//
+//        BlogBean blogBean = new BlogBean();
+//        blogBean.setBlogId(blog.getBlogId());
+//        blogBean.setTitle(blog.getTitle());
+//        List<Tag> tags = new ArrayList<>();
+//        if (!StringUtils.isEmpty(blog.getTags())) {
+//            String[] tagIds = blog.getTags().split(",");
+//            for (String tagId : tagIds) {
+//                Long id = ConvertUtil.parseLong(tagId, -1);
+//                String name = DicConstants.getInstance().getTagMap().get(id);
+//                if (!StringUtils.isEmpty(name))
+//                    tags.add(new Tag(id, name));
+//            }
+//        }
+//        blogBean.setSummary(blog.getSummary());
+//        blogBean.setContent(content);
+//        blogBean.setIfPub(blog.getIfPub() == 1);
+//
+//        return blogBean;
+//    }
 
     public String validate() {
         if (StringUtils.isEmpty(title)) {

@@ -50,6 +50,11 @@ public class ConvertUtil {
         return sdf.format(date);
     }
 
+    public static String parseDateTimetoString(Date date) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
+        return sdf.format(date);
+    }
+
     public static String getRandomStr() {
         return UUID.randomUUID().toString().replace("-", "");
     }

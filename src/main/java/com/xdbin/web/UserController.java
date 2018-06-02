@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * Author: baoxuebin
@@ -33,7 +35,10 @@ public class UserController {
     private String password;
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)
-    public ResponseEntity login(@RequestBody LoginBean loginBean) {
+    public ResponseEntity login(
+            HttpServletResponse response,
+            @RequestBody LoginBean loginBean
+    ) {
         if (StringUtils.isEmpty(loginBean)
                 || StringUtils.isEmpty(loginBean.getUsername())
                 || StringUtils.isEmpty(loginBean.getPassword()))
@@ -44,6 +49,15 @@ public class UserController {
 
         String token = jwtTokenUtil.buildToken("BaoXuebin");
         logger.debug("BaoXuebin 生成 token: " + token);
+
+        // 将 token 添加到 response 并返回
+        Cookie cookie = new Cookie("x-token", token);
+        cookie.setMaxAge(2 * 60 * 60); // 2 个小时
+        cookie.setPath("/");
+        cookie.setHttpOnly(true);
+        // cookie.setSecure(true); // 只有 https 请求才能携带此 cookie
+        response.addCookie(cookie);
+
         return ResponseEntity.ok(new UserBean("BaoXuebin", "包学斌", token));
     }
 

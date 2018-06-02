@@ -30,6 +30,8 @@ public class Blog implements Serializable {
 
     private Date updateTime;
 
+    private Integer editNum;
+
     private String tags;
 
     private Integer contentTextType;
@@ -123,6 +125,15 @@ public class Blog implements Serializable {
 
     public void setContentUrl(String contentUrl) {
         this.contentUrl = contentUrl;
+    }
+
+    @Column(name = "edit_num")
+    public Integer getEditNum() {
+        return editNum;
+    }
+
+    public void setEditNum(Integer editNum) {
+        this.editNum = editNum;
     }
 
     @Column(name = "if_pub")

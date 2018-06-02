@@ -23,8 +23,8 @@ interface BlogRepository extends JpaRepository<Blog, Serializable>, JpaSpecifica
     @Override
     Page<Blog> findAll(Specification<Blog> specification, Pageable pageable);
 
-    @Query("SELECT b FROM Blog b")
-    List<Blog> findAllBlogsByPage(Pageable pageable);
+//    @Query("SELECT b FROM Blog b")
+//    List<Blog> findAllBlogsByPage(Pageable pageable);
 
     @Query("SELECT b FROM Blog b WHERE b.ifPub = 1")
     List<Blog> findPubBlogsByPage(Pageable pageable);

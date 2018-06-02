@@ -63,24 +63,37 @@ public class BlogService {
     }
 
     public String saveBlog(BlogBean blogBean) {
+        /**
+         * 查询是否有原来的实体
+         */
+        Blog oldBlog = null;
+        if (!StringUtils.isEmpty(blogBean.getBlogId())) {
+            oldBlog = blogRepository.getOne(blogBean.getBlogId());
+        }
+
         // base + time + name.md
-        String contentUrl = FileUtil.writeBlogContent(pathProperty.getBlog(), blogBean.getContent());
+        String suffix = "";
+        if (!StringUtils.isEmpty(oldBlog)) {
+            suffix = "-ver" + (oldBlog.getEditNum() + 1);
+        }
+        String contentUrl = FileUtil.writeBlogContent(pathProperty.getBlog(), blogBean.getContent(), suffix);
         if (StringUtils.isEmpty(contentUrl)) {
             return null;
         }
 
         // 标签后加 ,
-        String tags = blogBean.getTags();
-        if (!StringUtils.isEmpty(blogBean.getTags())) {
-            if (!blogBean.getTags().startsWith(","))
-                tags = "," + tags;
-            if (!blogBean.getTags().endsWith(","))
-                tags = tags + ",";
-        }
+        String tags = String.join(",", blogBean.getTags().stream().map(tag -> String.valueOf(tag.getTagId())).collect(toList()));
 
         Blog blog = new Blog();
         blog.setBlogId(blogBean.getBlogId());
-        blog.setPublishTime(new Date());
+        // 变更
+        if (!StringUtils.isEmpty(oldBlog)) {
+            blog.setEditNum(oldBlog.getEditNum() + 1);
+            blog.setPublishTime(oldBlog.getPublishTime());
+        } else {
+            blog.setEditNum(0);
+            blog.setPublishTime(new Date());
+        }
         blog.setUpdateTime(new Date());
         blog.setTitle(blogBean.getTitle());
         blog.setTags(tags);
@@ -105,7 +118,7 @@ public class BlogService {
     }
 
     public List<BlogItemBean> getPublicBlogsByPage(int page) {
-        Sort s = new Sort(Sort.Direction.DESC, "updateTime");
+        Sort s = new Sort(Sort.Direction.DESC, "publishTime");
         return parseBeanList(blogRepository.findPubBlogsByPage(new PageRequest(page - 1, 10, s)));
     }
 
@@ -119,9 +132,9 @@ public class BlogService {
         return blogItemBeans;
     }
 
-    public List<BlogTableBean> getAllBlogsByPage(int page) {
-        Sort s = new Sort(Sort.Direction.DESC, "updateTime");
-        return parseBlogTableList(blogRepository.findAllBlogsByPage(new PageRequest(page - 1, 10, s)));
+    public Page<Blog> getAllBlogsByPage(int page) {
+        Sort s = new Sort(Sort.Direction.DESC, "publishTime");
+        return blogRepository.findAll(new PageRequest(page - 1, 10, s));
     }
 
     private List<BlogTableBean> parseBlogTableList(List<Blog> blogList) {
@@ -151,7 +164,7 @@ public class BlogService {
         List<BlogItemBean> blogItemBeans = Collections.emptyList();
         if (StringUtils.isEmpty(condition)) return blogItemBeans;
 
-        Sort s = new Sort(Sort.Direction.DESC, "updateTime");
+        Sort s = new Sort(Sort.Direction.DESC, "publishTime");
         Page<Blog> blogPage = blogRepository.findAll(where(condition), new PageRequest(condition.getPage() - 1, 10, s));
         if (blogPage.getContent().size() > 0) {
             blogItemBeans = blogPage.getContent().stream().map(BlogItemBean::parseBean).collect(toList());

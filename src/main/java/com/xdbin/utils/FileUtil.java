@@ -18,9 +18,9 @@ public class FileUtil {
         return read(blogBasePath + path);
     }
 
-    public static String writeBlogContent(String blogBasePath, String content) {
+    public static String writeBlogContent(String blogBasePath, String content, String suffix) {
         String time = ConvertUtil.parseDatetoString(new Date());
-        String contentUrl = time + File.separator  + ConvertUtil.getRandomStr() + ".md";
+        String contentUrl = time + File.separator  + ConvertUtil.getRandomStr() + suffix + ".md";
         String path = blogBasePath + time;
         try {
             Files.createDirectories(Paths.get(path));

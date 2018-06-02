@@ -4,6 +4,7 @@ import com.xdbin.Bean.*;
 import com.xdbin.annotation.Security;
 import com.xdbin.config.DicConstants;
 import com.xdbin.domain.Blog;
+import com.xdbin.sdk.qiniu.QiniuService;
 import com.xdbin.service.BlogService;
 import com.xdbin.service.NetBlogService;
 import com.xdbin.service.TagService;
@@ -14,6 +15,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Author: baoxuebin
@@ -26,10 +29,10 @@ public class BlogController {
     private BlogService blogService;
 
     @Resource
-    private TagService tagService;
+    private NetBlogService netBlogService;
 
     @Resource
-    private NetBlogService netBlogService;
+    private QiniuService qiniuService;
 
     /**
      * 条件分页查询博客列表
@@ -110,17 +113,19 @@ public class BlogController {
         if (StringUtils.isEmpty(blogId)) {
             return ResponseEntity.ok(new ErrorBean(400, "博客Id不能为空"));
         }
+        Blog blog = new Blog();
+        blog.setBlogId(blogId);
         if ("pub".equals(type)) {
             // 设置为公开
             blogService.setBlogPublic(blogId);
+            blog.setIfPub(1);
         } else if ("pvt".equals(type)) {
             // 设置为私有
             blogService.setBlogPrivate(blogId);
+            blog.setIfPub(0);
         } else {
             return ResponseEntity.ok(new ErrorBean(400, "无效请求"));
         }
-        Blog blog = new Blog();
-        blog.setBlogId(blogId);
         return ResponseEntity.ok(blog);
     }
 
@@ -129,6 +134,16 @@ public class BlogController {
     public ResponseEntity findNetBlogs(String page) {
         long p = ConvertUtil.parseLong(page, 1);
         return ResponseEntity.ok(netBlogService.findAllByPage((int) p, null));
+    }
+
+    @Security
+    @RequestMapping(value = "/qiniu/token")
+    public ResponseEntity getQiniuUploadToken() {
+        Map result = new HashMap();
+        result.put("token", qiniuService.buildUpToken());
+        result.put("key", "pics/" + ConvertUtil.parseDateTimetoString(new Date()));
+
+        return ResponseEntity.ok(result);
     }
 
 }

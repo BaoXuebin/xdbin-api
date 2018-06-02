@@ -23,6 +23,8 @@ public class BlogItemBean implements Serializable {
 
     private String title;
 
+    private Date publishTime;
+
     private Date updateTime;
 
     private String summary;
@@ -44,6 +46,7 @@ public class BlogItemBean implements Serializable {
         return new BlogItemBean(
                 blog.getBlogId(),
                 blog.getTitle(),
+                blog.getPublishTime(),
                 blog.getUpdateTime(),
                 blog.getSummary(),
                 summaryTextType,

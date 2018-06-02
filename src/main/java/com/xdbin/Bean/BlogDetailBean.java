@@ -23,6 +23,8 @@ public class BlogDetailBean implements Serializable {
 
     private String title;
 
+    private Date publishTime;
+
     private Date updateTime;
 
     private List<Tag> tags;
@@ -45,6 +47,7 @@ public class BlogDetailBean implements Serializable {
         return new BlogDetailBean(
                 blog.getBlogId(),
                 blog.getTitle(),
+                blog.getPublishTime(),
                 blog.getUpdateTime(),
                 tags,
                 contentTextType,

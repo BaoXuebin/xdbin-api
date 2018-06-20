@@ -82,7 +82,7 @@ public class BlogService {
         }
 
         // 标签后加 ,
-        String tags = String.join(",", blogBean.getTags().stream().map(tag -> String.valueOf(tag.getTagId())).collect(toList()));
+        String tags = "," + String.join(",", blogBean.getTags().stream().map(tag -> String.valueOf(tag.getTagId())).collect(toList())) + ",";
 
         Blog blog = new Blog();
         blog.setBlogId(blogBean.getBlogId());

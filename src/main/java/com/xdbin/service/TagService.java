@@ -40,11 +40,11 @@ public class TagService {
     }
 
     public Tag deleteTag(Long id) {
-        Tag tag = tagRepository.findOne(id);
+        Tag tag = tagRepository.findById(id).get();
         if (StringUtils.isEmpty(tag)) {
             return null;
         } else {
-            tagRepository.delete(id);
+            tagRepository.deleteById(id);
             // 刷新标签
             refreshTagMap();
             return tag;

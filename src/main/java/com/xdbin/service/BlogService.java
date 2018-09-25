@@ -114,7 +114,7 @@ public class BlogService {
     }
 
     public void deleteBlog(String blogId) {
-        blogRepository.delete(blogId);
+        blogRepository.deleteById(blogId);
     }
 
     public List<BlogItemBean> getPublicBlogsByPage(int page) {

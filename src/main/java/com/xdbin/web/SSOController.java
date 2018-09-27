@@ -12,33 +12,19 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import java.security.Principal;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 @RequestMapping("sso/")
- @RestController
+@RestController
 public class SSOController {
 
-    @Resource
-    OAuth2ClientContext oAuth2ClientContext;
-
-    @Bean
-    @ConfigurationProperties("github")
-    public SSOClientResources github() {
-        return new SSOClientResources();
-    }
-
-    @RequestMapping("github")
-    public ResponseEntity ssoGithub() {
-        SSOClientResources clientResources = github();
-
-        OAuth2ClientAuthenticationProcessingFilter oAuth2ClientAuthenticationProcessingFilter = new OAuth2ClientAuthenticationProcessingFilter("/sso/github");
-        OAuth2RestTemplate oAuth2RestTemplate = new OAuth2RestTemplate(clientResources.getClient(), oAuth2ClientContext);
-        oAuth2ClientAuthenticationProcessingFilter.setRestTemplate(oAuth2RestTemplate);
-        UserInfoTokenServices tokenServices = new UserInfoTokenServices(clientResources.getResource().getUserInfoUri(), clientResources.getClient().getClientId());
-        tokenServices.setRestTemplate(oAuth2RestTemplate);
-        oAuth2ClientAuthenticationProcessingFilter.setTokenServices(tokenServices);
-
-
-        return ResponseEntity.ok("Hello");
+    @RequestMapping({ "/user", "/me" })
+    public Map<String, String> user(Principal principal) {
+        Map<String, String> map = new LinkedHashMap<>();
+        map.put("name", principal.getName());
+        return map;
     }
 
 }

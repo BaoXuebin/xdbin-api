@@ -1,14 +1,10 @@
 package com.xdbin.Bean;
 
-import com.xdbin.config.DicConstants;
-import com.xdbin.domain.Blog;
 import com.xdbin.domain.Tag;
-import com.xdbin.utils.ConvertUtil;
 import lombok.Data;
 import org.springframework.util.StringUtils;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
 /**

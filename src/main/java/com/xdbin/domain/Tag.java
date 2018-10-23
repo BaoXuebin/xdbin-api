@@ -8,7 +8,7 @@ import java.io.Serializable;
  * Date: 2017/9/11
  */
 @Entity
-@Table(name = "DIC_TAG")
+@Table(name = "dic_tag")
 public class Tag implements Serializable {
 
     private long tagId;

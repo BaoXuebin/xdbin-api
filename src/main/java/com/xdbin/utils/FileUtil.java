@@ -1,6 +1,8 @@
 package com.xdbin.utils;
 
 
+import org.springframework.util.StringUtils;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -18,12 +20,22 @@ public class FileUtil {
         return read(blogBasePath + path);
     }
 
-    public static String writeBlogContent(String blogBasePath, String content, String suffix) {
+    public static String writeBlogContent(String blogBasePath, String originUrl, String content, String suffix) {
         String time = ConvertUtil.parseDatetoString(new Date());
-        String contentUrl = time + File.separator  + ConvertUtil.getRandomStr() + suffix + ".md";
-        String path = blogBasePath + time;
+        String contentUrl = null;
         try {
-            Files.createDirectories(Paths.get(path));
+            String path;
+            if (StringUtils.isEmpty(originUrl)) {
+                contentUrl = time + File.separator  + ConvertUtil.getRandomStr() + suffix + ".md";
+                path = blogBasePath + time;
+                Files.createDirectories(Paths.get(path));
+                Files.createDirectories(Paths.get(path));
+            } else {
+                String[] strs = originUrl.replace(".md", "").split("-");
+                if (strs.length > 0) {
+                    contentUrl = strs[0] + suffix + ".md";
+                }
+            }
             write(blogBasePath + File.separator + contentUrl, content);
         } catch (IOException e) {
             e.printStackTrace();

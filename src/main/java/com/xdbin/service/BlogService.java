@@ -1,26 +1,21 @@
 package com.xdbin.service;
 
 import com.xdbin.Bean.*;
-import com.xdbin.annotation.Security;
 import com.xdbin.config.PathProperty;
 import com.xdbin.domain.Blog;
-import com.xdbin.utils.ConvertUtil;
+import com.xdbin.domain.BlogTagMapper;
+import com.xdbin.repository.BlogTagMapperRepository;
 import com.xdbin.utils.FileUtil;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
 import javax.transaction.Transactional;
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -41,6 +36,9 @@ public class BlogService {
 
     @Resource
     private BlogRepository blogRepository;
+
+    @Resource
+    private BlogTagMapperRepository blogTagMapperRepository;
 
     public BlogDetailBean getPublicBlogDetailById(String blogId) {
         if (StringUtils.isEmpty(blogId)) return null;
@@ -73,10 +71,12 @@ public class BlogService {
 
         // base + time + name.md
         String suffix = "";
+        String originUrl = null;
         if (!StringUtils.isEmpty(oldBlog)) {
             suffix = "-ver" + (oldBlog.getEditNum() + 1);
+            originUrl = oldBlog.getContentUrl();
         }
-        String contentUrl = FileUtil.writeBlogContent(pathProperty.getBlog(), blogBean.getContent(), suffix);
+        String contentUrl = FileUtil.writeBlogContent(pathProperty.getBlog(), originUrl, blogBean.getContent(), suffix);
         if (StringUtils.isEmpty(contentUrl)) {
             return null;
         }
@@ -103,14 +103,24 @@ public class BlogService {
         blog.setContentUrl(contentUrl);
         blog.setIfPub(blogBean.isIfPub() ? 1 : 0);
 
-        saveBlog(blog);
-        return blog.getBlogId();
+        Blog b = saveBlog(blog);
+
+        if (b == null) return null;
+        String blogId = b.getBlogId();
+        // 删除原有的标签
+        blogTagMapperRepository.deleteAllByBlogId(blogId);
+        blogBean.getTags().forEach((tag) -> {
+            blogTagMapperRepository.save(new BlogTagMapper(blogId, tag.getTagId()));
+        });
+
+        return b.getBlogId();
     }
 
 
-    public void saveBlog(Blog blog) {
+    public Blog saveBlog(Blog blog) {
         if (blog != null)
-            blogRepository.save(blog);
+            return blogRepository.save(blog);
+        return null;
     }
 
     public void deleteBlog(String blogId) {

@@ -1,6 +1,5 @@
 package com.xdbin.service;
 
-import com.xdbin.Bean.BlogCondition;
 import com.xdbin.domain.Blog;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

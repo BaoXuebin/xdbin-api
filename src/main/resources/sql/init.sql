@@ -36,6 +36,20 @@ create table `NET_BLOG` (
   originLink varchar(100)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT = '关注的博客';
 
+create table `t_comment` (
+  `id` int primary key auto_increment comment 'id',
+  `origin` varchar(32) comment '来源',
+  `replyId` int comment '回复评论ID',
+  `username` varchar(50) comment '昵称',
+  `email` varchar(50) comment '邮箱',
+  `website` varchar(100) comment '网站',
+  `content` varchar(1000) comment '评论内容',
+  `type` tinyint(1) comment '评论类型：0 文本 1 markdown',
+  `publishTime` DATETIME comment '发布时间',
+  `valid` tinyint(1) default 1 comment '有效性',
+  key `idx_origin` (`origin`)
+) engine = InnoDB default charset = utf8 comment = '评论信息';
+
 -- 初始化用户
 
 CREATE USER 'xxx'@'localhost' IDENTIFIED BY 'xxx';

@@ -4,7 +4,6 @@ import com.xdbin.Bean.ErrorBean;
 import com.xdbin.Bean.LoginBean;
 import com.xdbin.Bean.UserBean;
 import com.xdbin.annotation.Security;
-import com.xdbin.config.PathProperty;
 import com.xdbin.utils.JwtTokenUtil;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Value;

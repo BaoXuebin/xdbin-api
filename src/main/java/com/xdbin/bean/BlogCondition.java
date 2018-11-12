@@ -1,4 +1,4 @@
-package com.xdbin.Bean;
+package com.xdbin.bean;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

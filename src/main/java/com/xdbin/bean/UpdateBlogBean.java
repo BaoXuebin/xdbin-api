@@ -1,4 +1,4 @@
-package com.xdbin.Bean;
+package com.xdbin.bean;
 
 import com.xdbin.config.DicConstants;
 import com.xdbin.domain.Blog;

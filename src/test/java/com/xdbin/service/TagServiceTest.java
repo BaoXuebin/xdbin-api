@@ -1,6 +1,7 @@
 package com.xdbin.service;
 
 import com.xdbin.ApiApplication;
+import com.xdbin.repository.BlogTagMapperRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -23,10 +24,12 @@ public class TagServiceTest {
     @Resource
     private TagService tagService;
 
+    @Resource
+    BlogTagMapperRepository blogTagMapperRepository;
+
     @Test
     public void isExit() throws Exception {
-        System.out.println(tagService.isExit("Atom"));
-        System.out.println(tagService.isExit("aaasss"));
+        blogTagMapperRepository.groupByTag().stream().forEach(System.out::println);
     }
 
 }

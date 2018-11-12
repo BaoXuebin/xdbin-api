@@ -1,7 +1,11 @@
 package com.xdbin.service;
 
 import com.xdbin.config.DicConstants;
+import com.xdbin.domain.BlogTagMapper;
 import com.xdbin.domain.Tag;
+import com.xdbin.repository.BlogTagMapperRepository;
+import com.xdbin.utils.EntityUtils;
+import com.xdbin.vo.TagVO;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -11,6 +15,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import static java.util.stream.Collectors.toList;
 
 /**
  * Author: baoxuebin
@@ -22,6 +28,9 @@ public class TagService {
 
     @Resource
     private TagRepository tagRepository;
+
+    @Resource
+    private BlogTagMapperRepository blogTagMapperRepository;
 
     public void saveTag(Tag tag) {
         if (!StringUtils.isEmpty(tag)) {
@@ -68,5 +77,20 @@ public class TagService {
             }
         }
         return null;
+    }
+
+    public List<TagVO> groupByTagId() {
+        List<Object[]> results = blogTagMapperRepository.groupByTag();
+        return results.stream().map(result -> {
+            Long tagId = null;
+            Long count = null;
+            if (result[0] != null) {
+                tagId = Long.parseLong(result[0].toString());
+            }
+            if (result[2] != null) {
+                count = Long.parseLong(result[2].toString());
+            }
+            return new TagVO(tagId, (String)result[1], count);
+        }).collect(toList());
     }
 }

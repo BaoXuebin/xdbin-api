@@ -1,6 +1,6 @@
 package com.xdbin.web;
 
-import com.xdbin.Bean.ErrorBean;
+import com.xdbin.bean.ErrorBean;
 import com.xdbin.annotation.Security;
 import com.xdbin.config.DicConstants;
 import com.xdbin.domain.Tag;
@@ -26,12 +26,7 @@ public class TagController {
 
     @RequestMapping(value = "/tags", method = RequestMethod.GET)
     public ResponseEntity tags() {
-        List<Tag> tags = new ArrayList<>();
-        Map<Long, String> tagMap = DicConstants.getInstance().getTagMap();
-        tagMap.forEach((k, v) -> {
-            tags.add(new Tag(k, v));
-        });
-        return ResponseEntity.ok(tags);
+        return ResponseEntity.ok(tagService.groupByTagId());
     }
 
     @Security

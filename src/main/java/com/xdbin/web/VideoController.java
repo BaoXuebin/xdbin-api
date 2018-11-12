@@ -1,6 +1,6 @@
 package com.xdbin.web;
 
-import com.xdbin.Bean.ErrorBean;
+import com.xdbin.bean.ErrorBean;
 import com.xdbin.condition.VideoCondition;
 import com.xdbin.domain.Video;
 import com.xdbin.service.VideoService;

@@ -1,6 +1,6 @@
 package com.xdbin.config;
 
-import com.xdbin.Bean.ErrorBean;
+import com.xdbin.bean.ErrorBean;
 import com.xdbin.annotation.Ignore;
 import com.xdbin.annotation.Security;
 import com.xdbin.utils.ContextUtil;

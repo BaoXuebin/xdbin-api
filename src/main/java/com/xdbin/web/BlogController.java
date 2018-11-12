@@ -1,6 +1,6 @@
 package com.xdbin.web;
 
-import com.xdbin.Bean.*;
+import com.xdbin.bean.*;
 import com.xdbin.annotation.Security;
 import com.xdbin.domain.Blog;
 import com.xdbin.sdk.qiniu.QiniuService;

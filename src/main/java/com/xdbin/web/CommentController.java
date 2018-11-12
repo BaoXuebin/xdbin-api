@@ -1,6 +1,6 @@
 package com.xdbin.web;
 
-import com.xdbin.Bean.ErrorBean;
+import com.xdbin.bean.ErrorBean;
 import com.xdbin.domain.Comment;
 import com.xdbin.service.CommentService;
 import org.springframework.http.ResponseEntity;

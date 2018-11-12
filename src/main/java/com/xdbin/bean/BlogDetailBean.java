@@ -1,4 +1,4 @@
-package com.xdbin.Bean;
+package com.xdbin.bean;
 
 import com.xdbin.domain.Blog;
 import com.xdbin.domain.Tag;

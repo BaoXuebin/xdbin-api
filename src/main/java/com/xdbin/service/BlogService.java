@@ -1,6 +1,6 @@
 package com.xdbin.service;
 
-import com.xdbin.Bean.*;
+import com.xdbin.bean.*;
 import com.xdbin.config.PathProperty;
 import com.xdbin.domain.Blog;
 import com.xdbin.domain.BlogTagMapper;

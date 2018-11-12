@@ -4,7 +4,7 @@ import com.xdbin.bean.*;
 import com.xdbin.config.PathProperty;
 import com.xdbin.domain.Blog;
 import com.xdbin.domain.BlogTagMapper;
-import com.xdbin.repository.BlogTagMapperRepository;
+import com.xdbin.tag.repository.BlogTagMapperRepository;
 import com.xdbin.utils.FileUtil;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;

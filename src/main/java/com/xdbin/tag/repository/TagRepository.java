@@ -1,4 +1,4 @@
-package com.xdbin.service;
+package com.xdbin.tag.repository;
 
 import com.xdbin.domain.Tag;
 import org.springframework.data.jpa.repository.JpaRepository;

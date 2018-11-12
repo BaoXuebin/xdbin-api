@@ -1,22 +1,19 @@
-package com.xdbin.service;
+package com.xdbin.tag.service;
 
 import com.xdbin.config.DicConstants;
-import com.xdbin.domain.BlogTagMapper;
 import com.xdbin.domain.Tag;
-import com.xdbin.repository.BlogTagMapperRepository;
-import com.xdbin.utils.EntityUtils;
-import com.xdbin.vo.TagVO;
+import com.xdbin.tag.TagSql;
+import com.xdbin.tag.repository.BlogTagMapperRepository;
+import com.xdbin.tag.repository.TagRepository;
+import com.xdbin.tag.vo.GroupTag;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
 import javax.transaction.Transactional;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import static java.util.stream.Collectors.toList;
 
 /**
  * Author: baoxuebin
@@ -79,18 +76,7 @@ public class TagService {
         return null;
     }
 
-    public List<TagVO> groupByTagId() {
-        List<Object[]> results = blogTagMapperRepository.groupByTag();
-        return results.stream().map(result -> {
-            Long tagId = null;
-            Long count = null;
-            if (result[0] != null) {
-                tagId = Long.parseLong(result[0].toString());
-            }
-            if (result[2] != null) {
-                count = Long.parseLong(result[2].toString());
-            }
-            return new TagVO(tagId, (String)result[1], count);
-        }).collect(toList());
+    public List groupByTagId() {
+        return blogTagMapperRepository.nativeQueryForList(TagSql.GROUP_TAG_BY_ID, null, GroupTag.class);
     }
 }

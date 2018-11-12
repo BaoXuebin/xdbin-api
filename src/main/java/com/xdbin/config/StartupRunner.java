@@ -1,6 +1,6 @@
 package com.xdbin.config;
 
-import com.xdbin.service.TagService;
+import com.xdbin.tag.service.TagService;
 import org.apache.log4j.Logger;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.annotation.Order;

@@ -1,18 +1,14 @@
-package com.xdbin.web;
+package com.xdbin.tag.controller;
 
 import com.xdbin.bean.ErrorBean;
 import com.xdbin.annotation.Security;
-import com.xdbin.config.DicConstants;
 import com.xdbin.domain.Tag;
-import com.xdbin.service.TagService;
+import com.xdbin.tag.service.TagService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 
 /**
  * Author: baoxuebin

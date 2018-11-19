@@ -1,11 +1,11 @@
 package com.xdbin.tag.service;
 
 import com.xdbin.config.DicConstants;
-import com.xdbin.domain.Tag;
+import com.xdbin.tag.entity.Tag;
 import com.xdbin.tag.TagSql;
 import com.xdbin.tag.repository.BlogTagMapperRepository;
 import com.xdbin.tag.repository.TagRepository;
-import com.xdbin.tag.vo.GroupTag;
+import com.xdbin.tag.model.GroupTag;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 

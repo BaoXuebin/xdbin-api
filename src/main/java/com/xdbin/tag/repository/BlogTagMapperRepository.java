@@ -1,7 +1,7 @@
 package com.xdbin.tag.repository;
 
 import com.xdbin.common.repository.NativeRepository;
-import com.xdbin.domain.BlogTagMapper;
+import com.xdbin.tag.entity.BlogTagMapper;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface BlogTagMapperRepository extends JpaRepository<BlogTagMapper, Long>, NativeRepository {

@@ -1,4 +1,4 @@
-package com.xdbin.domain;
+package com.xdbin.tag.entity;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;

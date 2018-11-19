@@ -1,4 +1,4 @@
-package com.xdbin.tag.vo;
+package com.xdbin.tag.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

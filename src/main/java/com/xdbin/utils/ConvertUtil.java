@@ -1,7 +1,7 @@
 package com.xdbin.utils;
 
 import com.xdbin.config.DicConstants;
-import com.xdbin.domain.Tag;
+import com.xdbin.tag.entity.Tag;
 import org.springframework.util.StringUtils;
 
 import java.text.SimpleDateFormat;

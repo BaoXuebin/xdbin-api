@@ -1,6 +1,6 @@
 package com.xdbin.bean;
 
-import com.xdbin.domain.Tag;
+import com.xdbin.tag.entity.Tag;
 import lombok.Data;
 import org.springframework.util.StringUtils;
 

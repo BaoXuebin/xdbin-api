@@ -1,4 +1,4 @@
-package com.xdbin.domain;
+package com.xdbin.tag.entity;
 
 import javax.persistence.*;
 import java.io.Serializable;

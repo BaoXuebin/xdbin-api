@@ -1,6 +1,6 @@
-package com.xdbin.vo;
+package com.xdbin.comment.model;
 
-import com.xdbin.domain.Comment;
+import com.xdbin.comment.entity.Comment;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.util.StringUtils;
@@ -25,7 +25,7 @@ public class CommentVo {
     private Date publishTime;
     private Integer valid;
 
-    public CommentVo(Comment comment) {
+    private CommentVo(Comment comment) {
         if (!StringUtils.isEmpty(comment)) {
             this.id = comment.getId();
             this.origin = comment.getOrigin();
@@ -38,7 +38,7 @@ public class CommentVo {
         }
     }
 
-    public static CommentVo parse(Comment comment) {
+    public static CommentVo from(Comment comment) {
         if (StringUtils.isEmpty(comment)) return null;
         return new CommentVo(comment);
     }

@@ -1,6 +1,6 @@
 package com.xdbin.tag.repository;
 
-import com.xdbin.domain.Tag;
+import com.xdbin.tag.entity.Tag;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**

@@ -24,7 +24,7 @@ public class VideoService {
     /**
      * 分页查询所有 video
      * @param page 页数
-     * @return Page
+     * @return CustomPage
      */
     public Page<Video> getAllVideoByPage(int page) {
         Sort s = new Sort(Sort.Direction.DESC, "uploadTime");
@@ -34,7 +34,7 @@ public class VideoService {
     /**
      * 分页查询公开的 video
      * @param videoCondition condition
-     * @return Page
+     * @return CustomPage
      */
     public Page<Video> getPubVideoByCondition(VideoCondition videoCondition) {
         Sort s = null;

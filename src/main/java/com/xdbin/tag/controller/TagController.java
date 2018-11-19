@@ -2,7 +2,7 @@ package com.xdbin.tag.controller;
 
 import com.xdbin.bean.ErrorBean;
 import com.xdbin.annotation.Security;
-import com.xdbin.domain.Tag;
+import com.xdbin.tag.entity.Tag;
 import com.xdbin.tag.service.TagService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;

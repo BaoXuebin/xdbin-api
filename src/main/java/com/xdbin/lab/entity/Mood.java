@@ -45,4 +45,12 @@ public class Mood implements Serializable {
         return mood;
     }
 
+    public Mood desensitize() {
+        if (Constants.PRI == this.pub) {
+            this.action = null;
+            this.content = null;
+        }
+        return this;
+    }
+
 }

@@ -26,7 +26,7 @@ public class VideoServiceTest {
 
     @Test
     public void getAllVideoByPage() throws Exception {
-        System.out.println(videoService.getAllVideoByPage(1));
+        System.out.println(videoService.getAllVideoByPage(1, 10));
     }
 
     @Test

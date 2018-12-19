@@ -28,4 +28,11 @@ public class MoodController {
         return ResponseEntity.ok(moodService.save(moodCondition));
     }
 
+    @Security
+    @RequestMapping(value = "/all", method = RequestMethod.GET)
+    public ResponseEntity queryAll(@RequestParam(value = "page", required = false) Integer page) {
+        if (StringUtils.isEmpty(page)) page = 1;
+        return ResponseEntity.ok(moodService.findAllMoodsByPage(page, 20));
+    }
+
 }

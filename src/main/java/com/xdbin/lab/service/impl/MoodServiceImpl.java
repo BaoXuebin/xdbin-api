@@ -27,6 +27,15 @@ public class MoodServiceImpl implements MoodService {
         pageNo = pageNo <= 0 ? 1 : pageNo;
         pageSize = pageSize < 0 ? 10 : pageSize;
         Sort s = new Sort(Sort.Direction.DESC, "publishTime");
+        return moodRepository.findAll(new PageRequest(pageNo - 1, pageSize, s)).map(Mood::desensitize);
+    }
+
+    @Override
+    public Page<Mood> findAllMoodsByPage(int pageNo, int pageSize) {
+        // format
+        pageNo = pageNo <= 0 ? 1 : pageNo;
+        pageSize = pageSize < 0 ? 10 : pageSize;
+        Sort s = new Sort(Sort.Direction.DESC, "publishTime");
         return moodRepository.findAll(new PageRequest(pageNo - 1, pageSize, s));
     }
 

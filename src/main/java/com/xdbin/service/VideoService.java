@@ -7,8 +7,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
+import java.util.Date;
 
 /**
  * Author: BaoXuebin
@@ -26,9 +28,9 @@ public class VideoService {
      * @param page 页数
      * @return CustomPage
      */
-    public Page<Video> getAllVideoByPage(int page) {
+    public Page<Video> getAllVideoByPage(int page, int pageSize) {
         Sort s = new Sort(Sort.Direction.DESC, "uploadTime");
-        return videoRepository.findAll(new PageRequest(page - 1, 10, s));
+        return videoRepository.findAll(new PageRequest(page - 1, pageSize, s));
     }
 
     /**
@@ -54,6 +56,10 @@ public class VideoService {
      * @return Video
      */
     public Video insert(Video video) {
+        if (StringUtils.isEmpty(video.getHeartNum())) {
+            video.setHeartNum(0);
+        }
+        video.setUploadTime(new Date());
         return videoRepository.save(video);
     }
 

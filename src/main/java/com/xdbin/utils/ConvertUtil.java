@@ -58,4 +58,14 @@ public class ConvertUtil {
     public static String getRandomStr() {
         return UUID.randomUUID().toString().replace("-", "");
     }
+
+    public static String flat(List<String> list, String separator) {
+        if (StringUtils.isEmpty(list) || list.isEmpty()) return null;
+        StringBuffer result = new StringBuffer();
+        list.forEach(l -> {
+            result.append(l);
+            result.append(separator);
+        });
+        return result.toString();
+    }
 }

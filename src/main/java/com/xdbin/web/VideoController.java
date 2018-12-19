@@ -1,5 +1,6 @@
 package com.xdbin.web;
 
+import com.xdbin.annotation.Security;
 import com.xdbin.bean.ErrorBean;
 import com.xdbin.condition.VideoCondition;
 import com.xdbin.domain.Video;
@@ -7,9 +8,7 @@ import com.xdbin.service.VideoService;
 import com.xdbin.utils.ConvertUtil;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 
@@ -25,10 +24,12 @@ public class VideoController {
     @Resource
     private VideoService videoService;
 
+    @Security
     @RequestMapping(value = "/all", method = RequestMethod.GET)
-    public ResponseEntity all(String page) {
-        int _page = ConvertUtil.parseInteger(page, 1);
-        return ResponseEntity.ok(videoService.getAllVideoByPage(_page));
+    public ResponseEntity all(@RequestParam(required = false) Integer page, @RequestParam(required = false) Integer pageSize) {
+        page = page == null ? 1 : page;
+        pageSize = pageSize == null ? 10 : pageSize;
+        return ResponseEntity.ok(videoService.getAllVideoByPage(page, pageSize));
     }
 
     @RequestMapping(method = RequestMethod.GET)
@@ -42,8 +43,9 @@ public class VideoController {
         return ResponseEntity.ok(videoService.getPubVideoByCondition(condition));
     }
 
+    @Security
     @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity save(Video video) {
+    public ResponseEntity save(@RequestBody Video video) {
         if (video != null) {
             if (StringUtils.isEmpty(video.getName())) {
                 return ResponseEntity.ok(new ErrorBean(400, "短片名称不能为空"));
@@ -59,13 +61,14 @@ public class VideoController {
         return ResponseEntity.ok(new ErrorBean(400, "短片不能为空"));
     }
 
-    @RequestMapping(method = RequestMethod.DELETE)
-    public ResponseEntity delete(String id) {
+    @Security
+    @RequestMapping(value = "/{videoId}", method = RequestMethod.DELETE)
+    public ResponseEntity delete(@PathVariable("videoId") String id) {
         int _id = ConvertUtil.parseInteger(id, -1);
         if (_id > 0) {
             videoService.delete(_id);
         }
-        return ResponseEntity.ok("删除成功");
+        return ResponseEntity.ok(id);
     }
 
 }

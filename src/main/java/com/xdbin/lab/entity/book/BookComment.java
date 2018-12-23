@@ -1,9 +1,7 @@
 package com.xdbin.lab.entity.book;
 
-import com.xdbin.common.base.BaseEntity;
 import com.xdbin.common.constants.Constants;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLDeleteAll;
 import org.hibernate.annotations.Where;
@@ -15,8 +13,8 @@ import java.util.Date;
 @Data
 @Entity
 @Table(name = "BOOK_COMMENT")
-@SQLDelete(sql = "UPDATE BOOK_COMMENT SET valid = " + Constants.DELETE_FLAG_DELETE + " WHERE id = ?")
-@SQLDeleteAll(sql = "UPDATE BOOK_COMMENT SET valid = " + Constants.DELETE_FLAG_DELETE + " WHERE id = ?")
+@SQLDelete(sql = "UPDATE book_comment SET valid = " + Constants.DELETE_FLAG_DELETE + " WHERE id = ?")
+@SQLDeleteAll(sql = "UPDATE book_comment SET valid = " + Constants.DELETE_FLAG_DELETE + " WHERE id = ?")
 @Where(clause = "valid = " + Constants.DELETE_FLAG_NORMAL)
 public class BookComment implements Serializable {
     @Id

@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 @NoRepositoryBean
-public interface NativeRepository {
+public interface NativeQueryRepository {
 
     List nativeQueryForList(String sql, Map<String, Object> args, Class result);
 

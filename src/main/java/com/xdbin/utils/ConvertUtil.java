@@ -6,6 +6,8 @@ import org.springframework.util.StringUtils;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Author: baoxuebin
@@ -67,5 +69,18 @@ public class ConvertUtil {
             result.append(separator);
         });
         return result.toString();
+    }
+
+    public static List<String> split(String str, String separator) {
+        if (StringUtils.isEmpty(str)) return Collections.emptyList();
+        return Stream.of(str.split(separator))
+                .filter(s -> !StringUtils.isEmpty(s))
+                .map(String::trim)
+                .collect(Collectors.toList());
+    }
+
+    public static void main(String[] args) {
+        ConvertUtil.split("|a|  c|d|", "\\|").forEach(System.out::println);
+
     }
 }

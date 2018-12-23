@@ -5,4 +5,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface BookProgressRepository extends JpaRepository<BookProgress, Integer> {
 
+    BookProgress findByBookId(Integer bookId);
+
 }

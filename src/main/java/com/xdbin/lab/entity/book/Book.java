@@ -15,8 +15,8 @@ import java.io.Serializable;
 @Data
 @Entity
 @Table(name = "BOOK")
-@SQLDelete(sql = "UPDATE BOOK SET valid = " + Constants.DELETE_FLAG_DELETE + " WHERE id = ?")
-@SQLDeleteAll(sql = "UPDATE BOOK SET valid = " + Constants.DELETE_FLAG_DELETE + " WHERE id = ?")
+@SQLDelete(sql = "UPDATE book SET valid = " + Constants.DELETE_FLAG_DELETE + " WHERE id = ?")
+@SQLDeleteAll(sql = "UPDATE book SET valid = " + Constants.DELETE_FLAG_DELETE + " WHERE id = ?")
 @Where(clause = "valid = " + Constants.DELETE_FLAG_NORMAL)
 public class Book implements Serializable {
 

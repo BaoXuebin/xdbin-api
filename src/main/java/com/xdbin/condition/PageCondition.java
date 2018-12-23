@@ -1,17 +1,28 @@
 package com.xdbin.condition;
 
-import lombok.Data;
-
 /**
  * Author: BaoXuebin
  * Date: 2018/7/8
  * Time: 下午3:39
  */
-@Data
 public class PageCondition {
 
-    private int pageNo;
+    private int pageNo = 1;
+    private int pageSize = 10;
 
-    private int pageSize;
+    public int getPageNo() {
+        return pageNo;
+    }
 
+    public int getPageSize() {
+        return pageSize;
+    }
+
+    public void setPageNo(Integer pageNo) {
+        this.pageNo = (pageNo != null && pageNo > 0) ? pageNo : 1;
+    }
+
+    public void setPageSize(Integer pageSize) {
+        this.pageSize = (pageSize != null && pageSize > 0) ? pageSize : 10;
+    }
 }

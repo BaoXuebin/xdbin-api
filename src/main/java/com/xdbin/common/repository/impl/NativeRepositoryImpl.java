@@ -1,18 +1,18 @@
 package com.xdbin.common.repository.impl;
 
 import com.xdbin.common.base.CustomPage;
-import com.xdbin.common.repository.NativeRepository;
+import com.xdbin.common.repository.NativeQueryRepository;
+import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-import java.math.BigInteger;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Function;
 
-public class NativeRepositoryImpl implements NativeRepository {
+@Repository(value = "nativeQueryRepository")
+public class NativeRepositoryImpl implements NativeQueryRepository {
 
     @PersistenceContext
     private EntityManager entityManager;
@@ -31,7 +31,11 @@ public class NativeRepositoryImpl implements NativeRepository {
         if (args != null && !args.isEmpty()) {
             args.keySet().stream()
                     .filter(key -> !"pageNo".equals(key) && !"pageSize".equals(key))
-                    .forEach(key -> query.setParameter(key, args.get(key)));
+                    .forEach(key -> {
+                        if (!StringUtils.isEmpty(args.get(key))) {
+                            query.setParameter(key, args.get(key));
+                        }
+                    });
         }
         return query;
     }

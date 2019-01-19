@@ -5,7 +5,7 @@
 
 	<groupId>com.xdbin</groupId>
 	<artifactId>api</artifactId>
-	<version>2.11_20181219</version>
+	<version>2.13_20180119</version>
 	<packaging>jar</packaging>
 
 	<name>api</name>
@@ -104,6 +104,21 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<artifactId>maven-source-plugin</artifactId>
+				<version>2.1</version>
+				<configuration>
+					<attach>true</attach>
+				</configuration>
+				<executions>
+					<execution>
+						<phase>install</phase>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>

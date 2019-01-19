@@ -12,6 +12,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -136,10 +137,14 @@ public class BlogController {
 
     @Security
     @RequestMapping(value = "/qiniu/token")
-    public ResponseEntity getQiniuUploadToken() {
-        Map result = new HashMap();
+    public ResponseEntity getQiniuUploadToken(@RequestParam(value = "type", required = false) String type) {
+        Map<String, String> result = new HashMap<>();
+        if ("video".equalsIgnoreCase(type)) {
+            result.put("key", "videos/" + ConvertUtil.parseDateTimetoString(new Date()));
+        } else {
+            result.put("key", "pics/" + ConvertUtil.parseDateTimetoString(new Date()));
+        }
         result.put("token", qiniuService.buildUpToken());
-        result.put("key", "pics/" + ConvertUtil.parseDateTimetoString(new Date()));
 
         return ResponseEntity.ok(result);
     }

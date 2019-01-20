@@ -1,6 +1,7 @@
 package com.xdbin.service;
 
 import com.xdbin.ApiApplication;
+import com.xdbin.blog.service.impl.BlogServiceImpl;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -8,8 +9,6 @@ import org.springframework.context.annotation.Import;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import javax.annotation.Resource;
-
-import static org.junit.Assert.*;
 
 /**
  * Author: baoxuebin
@@ -21,7 +20,7 @@ import static org.junit.Assert.*;
 public class BlogServiceTest {
 
     @Resource
-    private BlogService blogService;
+    private BlogServiceImpl blogService;
 
     @Test
     public void setBlogPublic() throws Exception {

@@ -1,4 +1,4 @@
-package com.xdbin.domain;
+package com.xdbin.blog.entity;
 
 import org.hibernate.annotations.GenericGenerator;
 

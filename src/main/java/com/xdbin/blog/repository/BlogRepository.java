@@ -1,6 +1,6 @@
-package com.xdbin.service;
+package com.xdbin.blog.repository;
 
-import com.xdbin.domain.Blog;
+import com.xdbin.blog.entity.Blog;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -17,7 +17,7 @@ import java.util.List;
  * Author: baoxuebin
  * Date: 2017/9/10
  */
-interface BlogRepository extends JpaRepository<Blog, Serializable>, JpaSpecificationExecutor<Blog> {
+public interface BlogRepository extends JpaRepository<Blog, Serializable>, JpaSpecificationExecutor<Blog> {
 
     @Override
     Page<Blog> findAll(Specification<Blog> specification, Pageable pageable);

@@ -1,7 +1,7 @@
-package com.xdbin.bean;
+package com.xdbin.blog.model;
 
 import com.xdbin.config.DicConstants;
-import com.xdbin.domain.Blog;
+import com.xdbin.blog.entity.Blog;
 import com.xdbin.tag.entity.Tag;
 import com.xdbin.utils.ConvertUtil;
 import lombok.Data;

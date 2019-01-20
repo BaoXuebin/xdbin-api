@@ -1,11 +1,22 @@
-package com.xdbin.service;
+package com.xdbin.blog.service.impl;
 
-import com.xdbin.bean.*;
+import com.xdbin.blog.BlogSql;
+import com.xdbin.blog.condition.BlogCondition;
+import com.xdbin.blog.entity.Blog;
+import com.xdbin.blog.entity.BlogItem;
+import com.xdbin.blog.model.*;
+import com.xdbin.blog.repository.BlogRepository;
+import com.xdbin.blog.service.BlogService;
+import com.xdbin.blog.vo.BlogItemView;
+import com.xdbin.common.base.CustomPage;
+import com.xdbin.common.repository.NativeQueryRepository;
+import com.xdbin.common.utils.SqlUtil;
 import com.xdbin.config.PathProperty;
-import com.xdbin.domain.Blog;
 import com.xdbin.tag.entity.BlogTagMapper;
 import com.xdbin.tag.repository.BlogTagMapperRepository;
 import com.xdbin.utils.FileUtil;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -14,12 +25,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
+import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.transaction.Transactional;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 import static java.util.stream.Collectors.toList;
 
@@ -29,7 +41,10 @@ import static java.util.stream.Collectors.toList;
  */
 @Service
 @Transactional
-public class BlogService {
+public class BlogServiceImpl implements BlogService {
+
+    @PersistenceContext
+    private EntityManager em;
 
     @Resource
     private PathProperty pathProperty;
@@ -40,6 +55,14 @@ public class BlogService {
     @Resource
     private BlogTagMapperRepository blogTagMapperRepository;
 
+    private final NativeQueryRepository nativeQueryRepository;
+
+    @Autowired
+    public BlogServiceImpl(@Qualifier("nativeQueryRepository") NativeQueryRepository nativeQueryRepository) {
+        this.nativeQueryRepository = nativeQueryRepository;
+    }
+
+    @Override
     public BlogDetailBean getPublicBlogDetailById(String blogId) {
         if (StringUtils.isEmpty(blogId)) return null;
         Blog blog = blogRepository.findPublicBlog(blogId);
@@ -50,6 +73,7 @@ public class BlogService {
         return null;
     }
 
+    @Override
     public UpdateBlogBean getUpdateBlogById(String blogId) {
         if (StringUtils.isEmpty(blogId)) return null;
         Blog blog = blogRepository.getOne(blogId);
@@ -60,8 +84,9 @@ public class BlogService {
         return null;
     }
 
+    @Override
     public String saveBlog(BlogBean blogBean) {
-        /**
+        /*
          * 查询是否有原来的实体
          */
         Blog oldBlog = null;
@@ -117,33 +142,27 @@ public class BlogService {
     }
 
 
+    @Override
     public Blog saveBlog(Blog blog) {
         if (blog != null)
             return blogRepository.save(blog);
         return null;
     }
 
+    @Override
     public void deleteBlog(String blogId) {
         blogRepository.delete(blogId);
     }
 
+    @Override
     public List<BlogItemBean> getPublicBlogsByPage(int page) {
-        Sort s = new Sort(Sort.Direction.DESC, "publishTime");
+        Sort s = new Sort(Sort.Direction.DESC, "updateTime");
         return parseBeanList(blogRepository.findPubBlogsByPage(new PageRequest(page - 1, 10, s)));
     }
 
-    private List<BlogItemBean> parseBeanList(List<Blog> blogList) {
-        List<BlogItemBean> blogItemBeans = Collections.emptyList();
-        if (!StringUtils.isEmpty(blogList) && blogList.size() > 0) {
-            blogItemBeans = blogList.stream()
-                    .map(BlogItemBean::parseBean)
-                    .collect(toList());
-        }
-        return blogItemBeans;
-    }
-
+    @Override
     public Page<Blog> getAllBlogsByPage(int page) {
-        Sort s = new Sort(Sort.Direction.DESC, "publishTime");
+        Sort s = new Sort(Sort.Direction.DESC, "updateTime");
         return blogRepository.findAll(new PageRequest(page - 1, 10, s));
     }
 
@@ -157,10 +176,12 @@ public class BlogService {
         return blogTableBeans;
     }
 
+    @Override
     public void setBlogPublic(String blogId) {
         blogRepository.updateBlogPubByBlogId(1, blogId);
     }
 
+    @Override
     public void setBlogPrivate(String blogId) {
         blogRepository.updateBlogPubByBlogId(0, blogId);
     }
@@ -170,14 +191,59 @@ public class BlogService {
      * @param condition 条件集合
      * @return List<BlogItemBean>
      */
+    @Override
     public List<BlogItemBean> getBlogsByCondition(BlogCondition condition) {
         List<BlogItemBean> blogItemBeans = Collections.emptyList();
         if (StringUtils.isEmpty(condition)) return blogItemBeans;
 
-        Sort s = new Sort(Sort.Direction.DESC, "publishTime");
-        Page<Blog> blogPage = blogRepository.findAll(where(condition), new PageRequest(condition.getPage() - 1, 10, s));
+        Sort s = new Sort(Sort.Direction.DESC, "updateTime");
+        Page<Blog> blogPage = blogRepository.findAll(where(condition), new PageRequest(9, 10, s));
         if (blogPage.getContent().size() > 0) {
             blogItemBeans = blogPage.getContent().stream().map(BlogItemBean::parseBean).collect(toList());
+        }
+        return blogItemBeans;
+    }
+
+    @Override
+    public CustomPage getBlogListByCondition(BlogCondition blogCondition) {
+        Map<String, Object> params = mapBlogCondition(blogCondition);
+        CustomPage page = nativeQueryRepository.nativeQueryForPage(
+                BlogSql.buildQueryBlogListSQL(params),
+                BlogSql.buildCountBlogListSQL(params),
+                params,
+                BlogItem.class
+        );
+        page.mapEntity((model) -> BlogItemView.from((BlogItem) model));
+        return page;
+    }
+
+    @Override
+    public List groupByMonth() {
+        return nativeQueryRepository.nativeQueryForList(BlogSql.GROUP_BY_MONTHLY, null, MonthlyBlog.class);
+    }
+
+    /**
+     * private function.
+     */
+
+    private Map<String, Object> mapBlogCondition(BlogCondition condition) {
+        if (StringUtils.isEmpty(condition)) return null;
+        return new HashMap<String, Object>() {{
+            put("pageNo", condition.getPageNo());
+            put("pageSize", condition.getPageSize());
+            put("title", SqlUtil.like(condition.getTitle()));
+            put("month", condition.getMonth());
+            put("tagId", condition.getTagId());
+            put("pub", condition.getPub());
+        }};
+    }
+
+    private List<BlogItemBean> parseBeanList(List<Blog> blogList) {
+        List<BlogItemBean> blogItemBeans = Collections.emptyList();
+        if (!StringUtils.isEmpty(blogList) && blogList.size() > 0) {
+            blogItemBeans = blogList.stream()
+                    .map(BlogItemBean::parseBean)
+                    .collect(toList());
         }
         return blogItemBeans;
     }
@@ -193,12 +259,26 @@ public class BlogService {
             if (!StringUtils.isEmpty(blogCondition.getTagId())) {
                 predicates.add(criteriaBuilder.like(root.get("tags").as(String.class), "%," + blogCondition.getTagId() + ",%"));
             }
+            // 查询月份
+            if (!StringUtils.isEmpty(blogCondition.getMonth())) {
+                predicates.add(criteriaBuilder.equal(criteriaBuilder.function("DATE_FORMAT", String.class, root.get("updateTime"), criteriaBuilder.parameter(String.class, "formatStr")) , blogCondition.getMonth()));
+            }
             // 是否公开
             if (blogCondition.getPub() != 0) {
                 // 只查询公开
                 predicates.add(criteriaBuilder.equal(root.get("ifPub").as(Integer.class), 1));
             }
-            return criteriaQuery.where(predicates.toArray(new Predicate[predicates.size()])).getRestriction();
+
+            CriteriaQuery cq = criteriaQuery.where(predicates.toArray(new Predicate[predicates.size()]));
+
+            // 查询月份
+            if (!StringUtils.isEmpty(blogCondition.getMonth())) {
+                Query tq = em.createQuery(cq);
+                tq.setParameter("formatStr", "%Y-%m");
+            }
+
+            Predicate predicate = cq.getRestriction();
+            return predicate;
         };
     }
 

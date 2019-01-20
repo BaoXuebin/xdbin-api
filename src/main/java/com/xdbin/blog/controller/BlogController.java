@@ -1,10 +1,14 @@
-package com.xdbin.web;
+package com.xdbin.blog.controller;
 
-import com.xdbin.bean.*;
 import com.xdbin.annotation.Security;
-import com.xdbin.domain.Blog;
+import com.xdbin.bean.*;
+import com.xdbin.blog.condition.BlogCondition;
+import com.xdbin.blog.model.BlogBean;
+import com.xdbin.blog.model.BlogDetailBean;
+import com.xdbin.blog.model.UpdateBlogBean;
+import com.xdbin.blog.service.BlogService;
+import com.xdbin.blog.entity.Blog;
 import com.xdbin.sdk.qiniu.QiniuService;
-import com.xdbin.service.BlogService;
 import com.xdbin.service.NetBlogService;
 import com.xdbin.utils.ConvertUtil;
 import org.springframework.http.ResponseEntity;
@@ -12,7 +16,6 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -38,21 +41,20 @@ public class BlogController {
      * @param blogCondition 分页条件
      */
     @RequestMapping(value = "/blogs", method = RequestMethod.GET)
-    public ResponseEntity blogs(BlogCondition blogCondition) {
+    public ResponseEntity getPubBlogList(BlogCondition blogCondition) {
         if (!StringUtils.isEmpty(blogCondition)) {
             blogCondition.setPub(1);
         } else {
             blogCondition = new BlogCondition();
             blogCondition.setPub(1);
         }
-        return ResponseEntity.ok(blogService.getBlogsByCondition(blogCondition));
+        return ResponseEntity.ok(blogService.getBlogListByCondition(blogCondition));
     }
 
     @Security
     @RequestMapping(value = "/blogs/all", method = RequestMethod.GET)
-    public ResponseEntity allTableBlogs(String page) {
-        long p = ConvertUtil.parseLong(page, 1);
-        return ResponseEntity.ok(blogService.getAllBlogsByPage((int) p));
+    public ResponseEntity allTableBlogs(BlogCondition blogCondition) {
+        return ResponseEntity.ok(blogService.getBlogListByCondition(blogCondition));
     }
 
     @RequestMapping(value = "/blog/{blogId}", method = RequestMethod.GET)
@@ -62,6 +64,15 @@ public class BlogController {
             blogDetailBean = blogService.getPublicBlogDetailById(blogId);
 
         return ResponseEntity.ok(blogDetailBean);
+    }
+
+    /**
+     * 查询按月份分组结果
+     * @return ResponseEntity [201901, 1]
+     */
+    @RequestMapping(value = "/blog/monthly", method = RequestMethod.GET)
+    public ResponseEntity groupByMonth() {
+        return ResponseEntity.ok(blogService.groupByMonth());
     }
 
     @Security

@@ -1,6 +1,7 @@
 package com.xdbin.utils;
 
 import com.xdbin.config.DicConstants;
+import com.xdbin.note.entity.FullNote;
 import com.xdbin.tag.entity.Tag;
 import org.springframework.util.StringUtils;
 
@@ -80,7 +81,7 @@ public class ConvertUtil {
     }
 
     public static void main(String[] args) {
-        ConvertUtil.split("|a|  c|d|", "\\|").forEach(System.out::println);
+        System.out.println(null instanceof FullNote);
 
     }
 }

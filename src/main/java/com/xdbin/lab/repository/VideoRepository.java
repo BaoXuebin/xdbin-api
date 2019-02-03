@@ -1,4 +1,4 @@
-package com.xdbin.repository;
+package com.xdbin.lab.repository;
 
 import com.xdbin.domain.Video;
 import org.springframework.data.domain.Page;

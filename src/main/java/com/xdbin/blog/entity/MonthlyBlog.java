@@ -1,4 +1,4 @@
-package com.xdbin.blog.model;
+package com.xdbin.blog.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

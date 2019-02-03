@@ -1,4 +1,4 @@
-package com.xdbin.web;
+package com.xdbin.user.controller;
 
 import com.xdbin.bean.ErrorBean;
 import com.xdbin.bean.LoginBean;
@@ -63,6 +63,18 @@ public class UserController {
     @Security
     @RequestMapping(value = "/validate", method = RequestMethod.POST)
     public ResponseEntity validate() {
+        return ResponseEntity.ok(new UserBean("BaoXuebin", "包学斌", null));
+    }
+
+    @Security
+    @RequestMapping(value = "/logout", method = RequestMethod.POST)
+    public ResponseEntity logout(HttpServletResponse response) {
+        // 将 token 添加到 response 并返回
+        Cookie cookie = new Cookie("x-token", "");
+        cookie.setMaxAge(1);
+        cookie.setPath("/");
+        cookie.setHttpOnly(true);
+        response.addCookie(cookie);
         return ResponseEntity.ok(new UserBean("BaoXuebin", "包学斌", null));
     }
 }

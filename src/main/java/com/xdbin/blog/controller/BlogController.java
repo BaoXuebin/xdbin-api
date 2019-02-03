@@ -1,15 +1,15 @@
 package com.xdbin.blog.controller;
 
 import com.xdbin.annotation.Security;
-import com.xdbin.bean.*;
+import com.xdbin.bean.ErrorBean;
 import com.xdbin.blog.condition.BlogCondition;
+import com.xdbin.blog.entity.Blog;
 import com.xdbin.blog.model.BlogBean;
 import com.xdbin.blog.model.BlogDetailBean;
 import com.xdbin.blog.model.UpdateBlogBean;
 import com.xdbin.blog.service.BlogService;
-import com.xdbin.blog.entity.Blog;
+import com.xdbin.lab.service.NetBlogService;
 import com.xdbin.sdk.qiniu.QiniuService;
-import com.xdbin.service.NetBlogService;
 import com.xdbin.utils.ConvertUtil;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
@@ -141,9 +141,14 @@ public class BlogController {
 
     // 关注的其他博客
     @RequestMapping(value = "/blog/star")
-    public ResponseEntity findNetBlogs(String page) {
+    public ResponseEntity findNetBlogList(String page, String origin) {
         long p = ConvertUtil.parseLong(page, 1);
-        return ResponseEntity.ok(netBlogService.findAllByPage((int) p, null));
+        return ResponseEntity.ok(netBlogService.findAllByPage((int) p, null, origin));
+    }
+
+    @RequestMapping(value = "/blog/star/origins")
+    public ResponseEntity groupByNetBlogOrigin() {
+        return ResponseEntity.ok(netBlogService.groupByOrigin());
     }
 
     @Security

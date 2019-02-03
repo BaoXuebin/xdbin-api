@@ -1,8 +1,9 @@
-package com.xdbin.service;
+package com.xdbin.lab.service.impl;
 
 import com.xdbin.condition.VideoCondition;
 import com.xdbin.domain.Video;
-import com.xdbin.repository.VideoRepository;
+import com.xdbin.lab.repository.VideoRepository;
+import com.xdbin.lab.service.VideoService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -18,7 +19,7 @@ import java.util.Date;
  * Time: 下午3:33
  */
 @Service
-public class VideoService {
+public class VideoServiceImpl implements VideoService {
 
     @Resource
     private VideoRepository videoRepository;
@@ -28,6 +29,7 @@ public class VideoService {
      * @param page 页数
      * @return CustomPage
      */
+    @Override
     public Page<Video> getAllVideoByPage(int page, int pageSize) {
         Sort s = new Sort(Sort.Direction.DESC, "uploadTime");
         return videoRepository.findAll(new PageRequest(page - 1, pageSize, s));
@@ -38,6 +40,7 @@ public class VideoService {
      * @param videoCondition condition
      * @return CustomPage
      */
+    @Override
     public Page<Video> getPubVideoByCondition(VideoCondition videoCondition) {
         Sort s = null;
         if ("hot".equals(videoCondition.getType())) {
@@ -55,6 +58,7 @@ public class VideoService {
      * @param video v
      * @return Video
      */
+    @Override
     public Video insert(Video video) {
         if (StringUtils.isEmpty(video.getHeartNum())) {
             video.setHeartNum(0);
@@ -67,6 +71,7 @@ public class VideoService {
      * 删除
      * @param videoId videoId
      */
+    @Override
     public void delete(Integer videoId) {
         videoRepository.delete(videoId);
     }

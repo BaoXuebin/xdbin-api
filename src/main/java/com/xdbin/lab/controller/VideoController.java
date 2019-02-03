@@ -1,10 +1,10 @@
-package com.xdbin.web;
+package com.xdbin.lab.controller;
 
 import com.xdbin.annotation.Security;
 import com.xdbin.bean.ErrorBean;
 import com.xdbin.condition.VideoCondition;
 import com.xdbin.domain.Video;
-import com.xdbin.service.VideoService;
+import com.xdbin.lab.service.VideoService;
 import com.xdbin.utils.ConvertUtil;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;

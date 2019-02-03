@@ -4,6 +4,7 @@ import com.xdbin.blog.BlogSql;
 import com.xdbin.blog.condition.BlogCondition;
 import com.xdbin.blog.entity.Blog;
 import com.xdbin.blog.entity.BlogItem;
+import com.xdbin.blog.entity.MonthlyBlog;
 import com.xdbin.blog.model.*;
 import com.xdbin.blog.repository.BlogRepository;
 import com.xdbin.blog.service.BlogService;

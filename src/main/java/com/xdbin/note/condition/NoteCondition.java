@@ -16,6 +16,7 @@ import java.util.List;
 @Data
 public class NoteCondition extends PageCondition implements Serializable {
 
+    private String userId;
     private String content;
     private Integer pub;
     private List<String> images;

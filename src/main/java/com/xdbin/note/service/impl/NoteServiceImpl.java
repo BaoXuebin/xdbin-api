@@ -61,7 +61,7 @@ public class NoteServiceImpl implements NoteService {
     }
 
     @Override
-    public Note saveOrUpdate(NoteCondition noteCondition) {
+    public Note saveOrUpdate(String userId, NoteCondition noteCondition) {
         if (StringUtils.isEmpty(noteCondition)) return null;
 
         /*
@@ -70,9 +70,10 @@ public class NoteServiceImpl implements NoteService {
         Note note = Note.from(noteCondition);
         if (StringUtils.isEmpty(note)) return null;
         note.setPublishTime(new Date());
+        note.setUserId(userId);
         note.setValid(Constants.DELETE_FLAG_NORMAL);
         if (StringUtils.isEmpty(noteCondition.getPub()) || Constants.PRI != noteCondition.getPub()) {
-            noteCondition.setPub(Constants.PUB);
+            note.setPub(Constants.PUB);
         }
         note = noteRepository.save(note);
 

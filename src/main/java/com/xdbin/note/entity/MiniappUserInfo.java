@@ -25,6 +25,7 @@ public class MiniappUserInfo implements Serializable {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Long id;
+    private String userId;
     private String openId;
     private String nickName;
     private String avatarUrl;

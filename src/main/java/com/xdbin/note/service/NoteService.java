@@ -16,6 +16,6 @@ public interface NoteService {
     // TODO: 修改返回值
     void saveOrUpdate(Long noteId, NoteCondition noteCondition);
 
-    Note saveOrUpdate(NoteCondition noteCondition);
+    Note saveOrUpdate(String userId, NoteCondition noteCondition);
 
 }

@@ -25,8 +25,9 @@ public class NoteSql {
     }
 
     private static String baseFullNoteQuery() {
-        return "SELECT n.id, n.user_id, n.content, n.publish_time, n.pub, n.valid, GROUP_CONCAT(ni.image_url SEPARATOR ',') as images " +
-                "FROM note n LEFT JOIN note_images ni ON n.id = ni.note_id AND ni.valid = 1 WHERE n.valid = 1 ";
+        return "SELECT n.id, n.user_id, n.content, n.publish_time, n.pub, n.valid, GROUP_CONCAT(ni.image_url SEPARATOR ',') as images, u.nick_name, u.avatar_url " +
+                "FROM note n LEFT JOIN note_images ni ON n.id = ni.note_id AND ni.valid = 1 " +
+                "LEFT JOIN miniapp_user_info u ON u.user_id = n.user_id AND u.valid = 1 WHERE n.valid = 1 ";
     }
 
     private static String baseFullNoteCount() {

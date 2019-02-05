@@ -43,13 +43,13 @@ public class SecurityAspect {
     public Object around(ProceedingJoinPoint pjp) throws Throwable {
         MethodSignature ms = (MethodSignature) pjp.getSignature();
         Method method = ms.getMethod();
-
-        if (isIgnore(method) || validateToken()) {
+        String token = token();
+        logger.debug(token);
+        if (isIgnore(method) || validateToken(token)) {
+            ContextUtil.getRequest().setAttribute("_userId", jwtTokenUtil.getUserIdFromToken(token));
             return pjp.proceed();
         }
-
-        logger.debug("用户未登录");
-
+        logger.error("用户未登录");
         return ResponseEntity.ok(new ErrorBean(401, "Unauthorized"));
     }
 
@@ -64,7 +64,7 @@ public class SecurityAspect {
         return false;
     }
 
-    private boolean validateToken() {
+    private String token() {
         HttpServletRequest request = ContextUtil.getRequest();
         String token = request.getHeader("auth");
         if (StringUtils.isEmpty(token)) { // header 中不携带 token, 从 cookie 中取
@@ -76,6 +76,10 @@ public class SecurityAspect {
                 }
             }
         }
+        return token;
+    }
+
+    private boolean validateToken(String token) {
         return jwtTokenUtil.validateToken(token);
     }
 

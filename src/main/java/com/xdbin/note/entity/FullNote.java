@@ -28,5 +28,7 @@ public class FullNote {
     private Integer valid;
 
     private String images;
+    private String nickName;
+    private String avatarUrl;
 
 }

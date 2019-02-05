@@ -22,6 +22,8 @@ public class FullNoteVO {
     private Date publishTime;
     private Integer pub;
     private Integer valid;
+    private String nickName;
+    private String avatarUrl;
 
     private List<String> images;
 
@@ -43,6 +45,8 @@ public class FullNoteVO {
         fullNoteVO.setPub(fullNote.getPub());
         fullNoteVO.setValid(fullNote.getValid());
         fullNoteVO.setImages(ConvertUtil.split(fullNote.getImages(), ","));
+        fullNoteVO.setNickName(fullNote.getNickName());
+        fullNoteVO.setAvatarUrl(fullNote.getAvatarUrl());
         return fullNoteVO;
     }
 

@@ -123,9 +123,9 @@ public class BlogServiceImpl implements BlogService {
         blog.setUpdateTime(new Date());
         blog.setTitle(blogBean.getTitle());
         blog.setTags(tags);
-        blog.setSummaryTextType(Blog.MARKDOWN);
+        blog.setSummaryTextType(defaultMarkdown(blogBean.getSummaryType()));
         blog.setSummary(blogBean.getSummary());
-        blog.setContentTextType(Blog.MARKDOWN);
+        blog.setContentTextType(defaultMarkdown(blogBean.getContentType()));
         blog.setContentUrl(contentUrl);
         blog.setIfPub(blogBean.isIfPub() ? 1 : 0);
 
@@ -140,6 +140,11 @@ public class BlogServiceImpl implements BlogService {
         });
 
         return b.getBlogId();
+    }
+
+    private Integer defaultMarkdown(Integer type) {
+        if (type == null) return Blog.MARKDOWN;
+        return type;
     }
 
 

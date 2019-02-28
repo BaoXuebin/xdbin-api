@@ -65,7 +65,7 @@ public class NativeRepositoryImpl implements NativeQueryRepository {
 
             List content = getQuery(sql, args, result).getResultList();
             page.setContent(content);
-            page.setLast(total <= (pageSize * pageNo + content.size()));
+            page.setLast(total <= (pageSize * (pageNo - 1) + content.size()));
         }
         return page;
     }

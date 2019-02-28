@@ -20,7 +20,11 @@ public class BlogBean implements Serializable {
 
     private List<Tag> tags;
 
+    private Integer summaryType;
+
     private String summary;
+
+    private Integer contentType;
 
     private String content;
 

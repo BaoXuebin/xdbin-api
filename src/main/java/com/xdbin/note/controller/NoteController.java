@@ -19,7 +19,6 @@ import javax.servlet.http.HttpServletRequest;
  * Date: 2019/2/2
  * Time: 9:27 PM
  */
-@Security
 @RestController
 @RequestMapping("/note")
 public class NoteController {
@@ -44,6 +43,7 @@ public class NoteController {
         return ResponseEntity.ok(page);
     }
 
+    @Security
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity save(@RequestBody NoteCondition noteCondition, HttpServletRequest request) {
         Assert.notNull(noteCondition, "Note must not be null.");

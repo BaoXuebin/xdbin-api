@@ -1,8 +1,6 @@
 package com.xdbin.note.service.impl;
 
-import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.qiniu.util.Json;
 import com.xdbin.common.constants.Constants;
 import com.xdbin.common.service.IdService;
 import com.xdbin.common.service.RestService;
@@ -20,8 +18,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
-
-import java.io.Serializable;
 
 /**
  * Author: BaoXuebin
@@ -69,7 +65,10 @@ public class MiniappServiceImpl implements MiniappService {
                 miniappUserInfo.setValid(Constants.DELETE_FLAG_NORMAL);
                 user = miniappUserInfoRepository.save(miniappUserInfo);
             }
-            return jwtTokenUtil.buildToken(user.getUserId());
+            // 只允许 ox-CY5e5HXtRKvxS1K94qF8zps3c
+            if ("ox-CY5e5HXtRKvxS1K94qF8zps3c".equals(user.getOpenId())) {
+                return jwtTokenUtil.buildToken(user.getUserId());
+            }
         }
         return null;
     }

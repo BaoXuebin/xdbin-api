@@ -16,6 +16,7 @@ import org.springframework.util.StringUtils;
 
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -72,7 +73,7 @@ public class TodoServiceImpl implements TodoService {
     @Override
     public Todo end(Long id) {
         Todo todo = todoRepository.findOne(id);
-        if (StringUtils.isEmpty(todo) || !StringUtils.isEmpty(todo.getIfFinish()) || todo.getIfFinish() == Constants.DELETE_FLAG_NORMAL) {
+        if (StringUtils.isEmpty(todo)) {
             return null;
         }
         todo.setFinishTime(new Date());

@@ -65,10 +65,7 @@ public class MiniappServiceImpl implements MiniappService {
                 miniappUserInfo.setValid(Constants.DELETE_FLAG_NORMAL);
                 user = miniappUserInfoRepository.save(miniappUserInfo);
             }
-            // 只允许 ox-CY5e5HXtRKvxS1K94qF8zps3c
-            if ("ox-CY5e5HXtRKvxS1K94qF8zps3c".equals(user.getOpenId())) {
-                return jwtTokenUtil.buildToken(user.getUserId());
-            }
+            return jwtTokenUtil.buildToken(user.getUserId());
         }
         return null;
     }

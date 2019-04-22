@@ -93,7 +93,7 @@ public class BookController {
     @Security
     @RequestMapping(value = "/isbn/{isbn}", method = RequestMethod.GET)
     public ResponseEntity fetchDouban(@PathVariable(value = "isbn") String ispn) {
-        return restService.fetch("https://api.douban.com/v2/book/isbn/" + ispn, HttpMethod.GET, null);
+        return restService.fetch("https://api.douban.com/v2/book/isbn/" + ispn + "?apikey=0df993c66c0c636e29ecbb5344252a4a", HttpMethod.GET, null);
     }
 
     @RequestMapping(value = "/{bookId}/comment", method = RequestMethod.GET)

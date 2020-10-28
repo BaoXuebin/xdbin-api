@@ -46,7 +46,6 @@ public class CommentController {
         return ResponseEntity.ok(commentService.findAll(page, 20));
     }
 
-    @Security
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity save(@RequestBody Comment comment) {
         Assert.notNull(comment, "Comment is not null!");

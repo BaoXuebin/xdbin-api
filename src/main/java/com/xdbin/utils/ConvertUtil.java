@@ -6,6 +6,9 @@ import com.xdbin.tag.entity.Tag;
 import org.springframework.util.StringUtils;
 
 import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -78,6 +81,12 @@ public class ConvertUtil {
                 .filter(s -> !StringUtils.isEmpty(s))
                 .map(String::trim)
                 .collect(Collectors.toList());
+    }
+
+    public static Date toDate(LocalDateTime localDateTime) {
+        ZoneId zone = ZoneId.systemDefault();
+        Instant instant = localDateTime.atZone(zone).toInstant();
+        return Date.from(instant);
     }
 
     public static void main(String[] args) {
